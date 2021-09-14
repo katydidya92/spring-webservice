@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>마이페이지</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>아이디</th>
+                <th>비밀번호</th>
+                <th>이름</th>
+                <th>이메일</th>
+                <th>나이</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${members}">
+                <td th:text="${member.userId}"></td>
+                <td th:text="${member.userPw}"></td>
+                <td th:text="${member.name}"></td>
+                <td th:text="${member.email}"></td>
+                <td th:text="${member.age}"></td>
+                <td>
+                    <a href="#" th:href="@{/members/{id}/edit (id=${member.id})}"
+                       class="btn btn-primary" role="button">수정</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div> <!-- /container -->
+</body>
+</html>

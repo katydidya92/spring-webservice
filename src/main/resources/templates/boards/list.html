@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>게시글 목록</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div class="container" style="max-width: 600px">
+        <div class="py-5 text-center">
+            <h2 >게시글 목록</h2>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary float-end"
+                        onclick="location.href='addPost.html'"
+                        th:onclick="|location.href='@{/board/add}'|"
+                        type="button" >게시글 등록</button>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th >ID</th>
+                    <th >게시글명</th>
+                    <th >작성자</th>
+                    <th >작성일</th>
+                    <th >조회수</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="post : ${posts}">
+                    <td th:text="${post.id}">게시글 ID</a></td>
+                    <td><a href="post.html" th:href="@{|/board/${post.id}|}" th:text="${post.title}">게시글명</a></td>
+                    <td th:text="${post.userId}">작성자</td>
+                    <td th:text="${#temporals.format(post.LastModifiedDate,'yyyy-MM-dd HH:mm')}">수정일</td>
+                    <td th:text="${post.count}">조회수</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <hr class="my-4">
+
+            <ul class="pagination justify-content-center" style="margin:20px 0"
+                th:with="start=${T(Math).floor(posts.number/pageSize) * pageSize + 1},
+                         last=(${start + (pageSize-1) < posts.totalPages ? start + (pageSize-1) : posts.totalPages})">
+
+                <th:block th:with="
+                        firstPage=@{/board/list(page=1,type=${param.type}, keyword=${param.keyword})},
+                        prevPage=@{/board/list(page=${posts.number},type=${param.type}, keyword=${param.keyword})},
+                        nextPage=@{/board/list(page=${posts.number + 2}, type=${param.type}, keyword=${param.keyword})},
+                        lastPage=@{/board/list(page=${posts.totalPages}, type=${param.type}, keyword=${param.keyword})}">
+
+                    <li th:class="${posts.first} ? 'page-item disabled' : 'page-item'">
+                        <a th:class="page-link"
+                           th:href="${firstPage}" th:text="1">1</a>
+                    </li>
+
+                    <li th:class="${posts.first} ? 'page-item disabled' : 'page-item'">
+                        <a th:class="page-link" th:text="|&lt;|"
+                           th:href="${posts.first} ? ${firstPage} :${prevPage}"></a>
+                    </li>
+
+                    <li th:each="page: ${#numbers.sequence(start, last)}"
+                        th:class="${page == posts.number + 1} ? 'page-item active' : 'page-item'">
+                        <a th:class="page-link" th:text="${page}" th:href="@{/board/list(page=${page},type=${param.type}, keyword=${param.keyword})}"></a>
+                    </li>
+
+                    <li th:class="${posts.last} ? 'page-item disabled' : 'page-item'">
+                        <a th:class="page-link" th:text="|&gt;|"
+                           th:href="${posts.last} ? ${lastPage} : ${nextPage}"></a>
+                    </li>
+
+                    <li th:class="${posts.last} ? 'page-item disabled' : 'page-item'">
+                        <a th:class="page-link"
+                           th:href="${lastPage}" th:text="${posts.totalPages}">마지막</a>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+
+        <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
+            <div class="form-group mx-sm-3 mb-2">
+                <div class="search">
+                    <select id="type" name="type">
+                        <option th:value="title" th:text="제목"/>제목</option>
+                        <option th:value="content" th:text="내용"/>내용</option>
+                    </select>
+
+                    <label for="keyword" class="sr-only">검색</label>
+                    <input type="text" class="form-control" id="keyword" name="keyword" th:value="${param.keyword}">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-light mb-2">검색</button>
+            <button class="btn btn-light mb-2"
+                    onclick="location.href='list.html'"
+                    th:onclick="|location.href='@{/board/list}'|"
+                    type="button">취소</button>
+        </form>
+    </div> <!-- /container -->
+</body>
+</html>

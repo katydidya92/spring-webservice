@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>게시글</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div class="container">
+
+        <div class="py-5 text-center">
+            <h2 >게시글</h2>
+        </div>
+
+        <div>
+            <label for="postId" >게시글 ID</label>
+            <input type="text" id="postId" name="postId" class="form-control" value="1" th:value="${article.id}" readonly>
+        </div>
+        <div>
+            <label for="title" >게시글명</label>
+            <input type="text" id="title" name="title" class="form-control" value="상품A" th:value="${article.title}" readonly>
+        </div>
+        <div>
+            <label for="content">게시글 내용</label>
+            <input type="text" id="content" name="content" class="form-control" value="10000" th:value="${article.content}" readonly>
+        </div>
+        <div>
+            <label for="userId" >게시글 작성자</label>
+            <input type="text" id="userId" name="userId" class="form-control" value="10" th:value="${article.userId}" readonly>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row">
+            <div class="col">
+                <button th:if="${article.userId} == ${member.userId} "
+                        class="w-100 btn btn-primary btn-lg"
+                        onclick="location.href='editPost.html'"
+                        th:onclick="|location.href='@{/board/{postId}/edit(postId=${article.id})}'|"
+                        type="button" >게시글 수정</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='list.html'"
+                        th:onclick="|location.href='@{/board/list}'|"
+                        type="button" >게시글 목록으로</button>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <table class="table" >
+            <thead>
+                <tr>
+                    <th >댓글 내용</th>
+                    <th >작성자</th>
+                    <th >작성일</th>
+                    <th >수정/삭제</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cmt : ${cmts}">
+                    <td th:text="${cmt.cmtContent}">내용</td>
+                    <td th:text="${cmt.member.userId}">작성자</td>
+                    <td th:text="${#temporals.format(cmt.LastModifiedDate,'yyyy-MM-dd HH:mm')}">수정일</td>
+                    <td >
+                        <button th:if="${cmt.member.userId} == ${member.userId} "
+                                class="w-100 btn btn-primary btn-lg"
+                                onclick="location.href='editPost.html'"
+                                th:onclick="|location.href='@{/board/{postId}/{cmtId}/comment_edit(cmtId=${cmt.commentId}, postId=${article.id})}'|"
+                                type="button" >댓글 수정</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="input-group mb-3">
+            <form class="form-inline d-flex justify-content-end" th:action="@{|/board/${article.id}/comment_write|}" method="post">
+                <input type="text" id="cmtContent" name="cmtContent" class="form-control" placeholder="댓글을 입력해주세요">
+                <input type="hidden" id="cmtId" name="postId" th:value="${article.id}">
+                <button class="btn btn-light mb-2" type="submit">댓글쓰기</button>
+            </form>
+
+        </div>
+
+    </div> <!-- /container -->
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>회원정보</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div class="container">
+        <h4 class="mb-3">회원 정보</h4>
+
+        <div>
+            <label for="userId">로그인 ID</label>
+            <input type="text" id="userId" th:value="${member.userId}" class="form-control" readonly >
+        </div>
+        <div>
+            <label for="userPw">비밀번호</label>
+            <input type="password" id="userPw" th:value="${member.userPw}" class="form-control" readonly >
+        </div>
+        <div>
+            <label for="name">이름</label>
+            <input type="text" id="name" th:value="${member.name}" class="form-control" readonly >
+        </div>
+        <div>
+            <label for="email">이메일</label>
+            <input type="text" id="email" th:value="${member.email}" class="form-control" readonly >
+        </div>
+        <div>
+            <label for="age">나이</label>
+            <input type="text" id="age" th:value="${member.age}" class="form-control" readonly >
+        </div>
+
+        <hr class="my-4">
+        <div>
+            <label for="zipcode">우편번호</label>
+            <input type="text" id="zipcode" th:value="${member.address.zipcode}" class="form-control" readonly >
+        </div>
+        <div>
+            <label for="roadAddr">도로명 주소</label>
+            <input type="text" id="roadAddr" th:value="${member.address.roadAddr}" class="form-control" readonly>
+        </div>
+        <div>
+            <label for="addrDetail">상세주소</label>
+            <input type="text" id="addrDetail" th:value="${member.address.addrDetail}" class="form-control" readonly >
+        </div>
+        <div>
+            <label for="adEtc">기타</label>
+            <input type="text" id="adEtc" th:value="${member.address.adEtc}" class="form-control" readonly>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row">
+
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='../home.html'"
+                        th:onclick="|location.href='@{/}'|"
+                        type="button">취소</button>
+            </div>
+        </div>
+    </div> <!-- /container -->
+</body>
+</html>
