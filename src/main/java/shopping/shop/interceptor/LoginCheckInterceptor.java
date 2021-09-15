@@ -2,7 +2,7 @@ package shopping.shop.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
-import shopping.shop.session.SessionConst;
+import shopping.shop.login.session.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
