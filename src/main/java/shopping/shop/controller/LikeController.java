@@ -27,4 +27,15 @@ public class LikeController {
         return "redirect:/board/{postId}";
     }
 
+    @GetMapping("board/{postId}/unlike")
+    public String unlike(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
+                          @PathVariable Long postId) {
+
+        if (member != null) {
+            likeService.unlike(member, postId);
+        }
+
+        return "redirect:/board/{postId}";
+    }
+
 }

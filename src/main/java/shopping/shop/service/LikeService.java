@@ -9,6 +9,7 @@ import shopping.shop.repository.LikeRepository;
 import shopping.shop.repository.PostRepository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -24,6 +25,16 @@ public class LikeService {
         // 중복 방지
         if (isNotAlreadyLike(member, post)) {
             likeRepository.save(new Like(post, member));
+        }
+    }
+
+    public void unlike(Member member, Long postId) {
+        Post post = postRepository.getById(postId);
+        Optional<Like> postLike = likeRepository.findByMemberAndPost(member, post);
+        Long likeId = postLike.get().getId();
+
+        if (!isNotAlreadyLike(member, post)) {
+            likeRepository.deleteById(likeId);
         }
     }
 
