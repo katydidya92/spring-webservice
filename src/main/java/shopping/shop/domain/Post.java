@@ -7,7 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -28,6 +30,9 @@ public class Post extends BaseTimeEntity {
 
     @Column(columnDefinition = "integer default 0")
     private int count;
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    Set<Like> likes = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)

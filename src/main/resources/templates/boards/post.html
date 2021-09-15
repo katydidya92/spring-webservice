@@ -49,6 +49,22 @@
 
         <hr class="my-4">
 
+        <div>
+            <img th:if="${likeCheck} == true"
+                 id="unlikeImg" alt="unlike"
+                 src="/images/unlike.png"
+                 th:src="@{/images/unlike.png}" width="40" height="40"
+                 th:onclick="|location.href='@{|/board/${article.id}/like|}'|">
+
+            <img th:if="${likeCheck} == false"
+                 id="likeImg" alt="like"
+                 src="/images/like.png"
+                 th:src="@{/images/like.png}" width="40" height="40"
+                 th:onclick="|location.href='@{|/board/${article.id}/unlike|}'|">
+        </div>
+
+        <hr class="my-4">
+
         <table class="table" >
             <thead>
                 <tr>
@@ -80,7 +96,6 @@
                 <input type="hidden" id="cmtId" name="postId" th:value="${article.id}">
                 <button class="btn btn-light mb-2" type="submit">댓글쓰기</button>
             </form>
-
         </div>
 
     </div> <!-- /container -->

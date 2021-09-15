@@ -16,6 +16,7 @@ import shopping.shop.domain.Post;
 import shopping.shop.dto.MemberDto;
 import shopping.shop.dto.PostDto;
 import shopping.shop.service.CommentRepositoryImpl;
+import shopping.shop.service.LikeService;
 import shopping.shop.service.PostService;
 import shopping.shop.session.SessionConst;
 
@@ -32,6 +33,7 @@ public class BoardController {
 
     private final PostService postService;
     private final CommentRepositoryImpl commentService;
+    private final LikeService likeService;
 
     @GetMapping("/add")
     public String openAddPost(Model model) {
@@ -105,13 +107,18 @@ public class BoardController {
     public String openBoard(@PathVariable Long postId, Model model,
                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        postService.updateHitById(postId);
-
         Post post = postService.getById(postId);
+
+        postService.updateHitById(postId);
+        boolean likeCheck = likeService.isNotAlreadyLike(member, post);
+
+        log.info("boardController : likeCheck= {}", likeCheck);
+
         List<Comment> cmts = commentService.findAllById(postId);
         model.addAttribute("article", post);
         model.addAttribute("cmts", cmts);
         model.addAttribute("member", member);
+        model.addAttribute("likeCheck", likeCheck);
 
         return "boards/post";
     }

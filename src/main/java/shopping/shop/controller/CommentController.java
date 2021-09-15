@@ -21,7 +21,11 @@ public class CommentController {
     private final CommentRepositoryImpl cmtService;
 
     @PostMapping("board/{postId}/comment_write")
-    public String addComment(@ModelAttribute Comment comment, @PathVariable Long postId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+    public String addComment(@ModelAttribute Comment comment,
+                             @PathVariable Long postId,
+                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER,
+                                     required = false) Member member) {
+
         service.commentWrite(comment, member, postId);
         return "redirect:/board/{postId}";
     }
