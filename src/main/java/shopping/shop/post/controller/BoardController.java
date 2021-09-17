@@ -20,6 +20,7 @@ import shopping.shop.like.service.LikeService;
 import shopping.shop.post.service.PostService;
 import shopping.shop.login.session.SessionConst;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
@@ -121,15 +122,23 @@ public class BoardController {
 
         return "boards/post";
     }
+
+    @GetMapping("/{postId}/delete")
+    public String postDelete(@PathVariable Long postId) {
+
+        postService.updatePostIsAvailable(postId);
+
+        return "redirect:/board/list ";
+    }
     
     /**
      * 테스트용 글 추가
      */
-//    @PostConstruct
-//    public void init() {
-//        for (int i = 1; i < 101; i++) {
-//            postService.save(new Post("test!", "a" + i, "b" + i));
-//        }
-//    }
+    @PostConstruct
+    public void init() {
+        for (int i = 1; i < 101; i++) {
+            postService.save(new Post("test!", "a" + i, "b" + i));
+        }
+    }
 
 }

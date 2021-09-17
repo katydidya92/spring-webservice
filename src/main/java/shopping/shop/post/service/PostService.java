@@ -58,4 +58,14 @@ public class PostService {
     public int updateHitById(Long id) {
         return postRepository.updateHitById(id);
     }
+
+    @Transactional
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
+    }
+
+    @Transactional
+    public void updatePostIsAvailable(Long postId) {
+        postRepository.updatePostIsAvailable(postId);
+    }
 }

@@ -34,6 +34,9 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "integer default 0")
     private int count;
 
+    @Column(columnDefinition = "int default 0")
+    private int isAvailable ;
+
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     Set<Like> likes = new HashSet<>();
 
