@@ -7,7 +7,7 @@ import shopping.shop.member.domain.Member;
 import shopping.shop.member.domain.MemberDto;
 
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.List;
 
 @Slf4j
 @Repository
@@ -38,6 +38,5 @@ public class MemberRepository2 {
     public Member findOne(Long id) {
         return em.find(Member.class, id);
     }
-
 
 }

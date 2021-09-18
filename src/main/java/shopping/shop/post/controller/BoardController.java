@@ -10,15 +10,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shopping.shop.comment.domain.Comment;
-import shopping.shop.member.domain.Member;
-import shopping.shop.domain.MyPageSize;
-import shopping.shop.post.domain.Post;
-import shopping.shop.member.domain.MemberDto;
-import shopping.shop.post.domain.PostDto;
 import shopping.shop.comment.service.CommentRepositoryImpl;
+import shopping.shop.domain.MyPageSize;
 import shopping.shop.like.service.LikeService;
-import shopping.shop.post.service.PostService;
 import shopping.shop.login.session.SessionConst;
+import shopping.shop.member.domain.Member;
+import shopping.shop.member.domain.MemberDto;
+import shopping.shop.post.domain.Post;
+import shopping.shop.post.domain.PostDto;
+import shopping.shop.post.service.PostService;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -130,12 +130,12 @@ public class BoardController {
 
         return "redirect:/board/list ";
     }
-    
+
     /**
      * 테스트용 글 추가
      */
     @PostConstruct
-    public void init() {
+    public void initDb() {
         for (int i = 1; i < 101; i++) {
             postService.save(new Post("test!", "a" + i, "b" + i));
         }

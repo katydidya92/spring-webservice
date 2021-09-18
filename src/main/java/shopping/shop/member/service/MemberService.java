@@ -4,18 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shopping.shop.member.domain.MemberDto;
+import shopping.shop.domain.Address;
+import shopping.shop.member.domain.Member;
 import shopping.shop.member.repository.MemberRepository;
 import shopping.shop.member.repository.MemberRepository2;
-import shopping.shop.member.domain.Member;
 
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -26,6 +25,22 @@ public class MemberService {
         validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();
+    }
+
+    @Transactional
+    public void updateMember(Long memberId, Member member) {
+        Member memberData = memberRepository.getById(memberId);
+        log.info("memberData1={}", memberData.getAddress().getZipcode());
+        memberData.setAge(member.getAge());
+        memberData.setName(member.getName());
+        memberData.setEmail(member.getEmail());
+        memberData.setAddress(new Address(
+                member.getAddress().getZipcode(),
+                member.getAddress().getRoadAddr(),
+                member.getAddress().getAddrDetail(),
+                member.getAddress().getAdEtc()
+        ));
+        log.info("memberData2={}", memberData.getAddress().getZipcode());
     }
 
     private void validateDuplicateMember(Member member) {

@@ -1,6 +1,5 @@
 package shopping.shop.member.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,10 +15,9 @@ import shopping.shop.member.service.MemberService;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
-@Getter
-@Slf4j
 @RequestMapping("/members")
 public class MemberController {
 
@@ -68,11 +66,34 @@ public class MemberController {
     public String memberOpen(@PathVariable Long id, Model model) {
 
         Member member = memberService.findOne(id);
-        log.info("memberOpen : zipcode ={}",member.getAddress().getZipcode());
+        log.info("memberOpen : zipcode ={}", member.getAddress().getZipcode());
 
         model.addAttribute("member", member);
 
         return "members/memberInfo";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editMemberFormOpen(@PathVariable Long id, Model model) {
+
+        Member member = memberService.findOne(id);
+        model.addAttribute("member", member);
+        return "members/editMemberForm";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editMember(@PathVariable Long id, @ModelAttribute("member") Member member, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "members/editMemberForm";
+        }
+
+        log.info("memberDataController={}", member.getAddress().getZipcode());
+
+        memberService.updateMember(id, member);
+
+        return "redirect:/members/{id}";
     }
 
     /**
@@ -81,6 +102,7 @@ public class MemberController {
     @PostConstruct
     public void init() {
         memberService.join(new Member("test!", "test!"));
-        memberService.join(new Member("asd", "asd"));
+        memberService.join(new Member("asd", "asd", "asd", 10, "asd@asd",
+                new Address("06112", "서울 강남구 논현로123길 4-1", "123", "(논현동)")));
     }
 }

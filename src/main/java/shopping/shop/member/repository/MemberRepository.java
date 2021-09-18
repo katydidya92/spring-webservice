@@ -11,8 +11,7 @@ import java.util.List;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    @Query("select m from Member m where userId = :userId")
+    @Query("select m.userId from Member m where userId = :userId")
     List<Member> findUserId(@Param("userId") String userId);
-
 
 }
