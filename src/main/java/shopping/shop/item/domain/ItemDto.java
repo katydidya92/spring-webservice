@@ -11,7 +11,9 @@ import javax.validation.constraints.NotNull;
 @Getter @Setter
 public class ItemDto {
 
-    private Long id;
+    private Long itemId;
+
+    private String userId;
 
     @NotBlank
     private String itemName;

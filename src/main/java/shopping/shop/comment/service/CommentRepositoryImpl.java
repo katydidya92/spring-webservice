@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
-import static shopping.shop.domain.QComment.comment;
+import static shopping.shop.comment.domain.QComment.comment;
 
 @Service
 @Transactional(readOnly = true)

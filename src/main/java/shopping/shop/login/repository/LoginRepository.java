@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import shopping.shop.member.domain.Member;
 
 import javax.persistence.EntityManager;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
