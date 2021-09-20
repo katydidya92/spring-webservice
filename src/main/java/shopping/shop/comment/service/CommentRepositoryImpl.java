@@ -40,6 +40,14 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 .execute();
     }
 
+    @Override
+    public void deleteComment(Long cmtId) {
+        long execute = query
+                .delete(comment)
+                .where(cmtIdEq(cmtId))
+                .execute();
+    }
+
     private BooleanExpression postIdEq(Long postId) {
         return isEmpty(postId) ? null : comment.post.id.eq(postId);
     }

@@ -45,6 +45,12 @@
                 <div class="col">
                     <button class="w-100 btn btn-secondary btn-lg"
                             onclick="location.href='list.html'"
+                            th:onclick="|location.href='@{|/board/${comment.post.id}/${comment.commentId}/comment_delete|}'|"
+                            type="button">삭제</button>
+                </div>
+                <div class="col">
+                    <button class="w-100 btn btn-secondary btn-lg"
+                            onclick="location.href='list.html'"
                             th:onclick="|location.href='@{|/board/${comment.post.id}|}'|"
                             type="button">취소</button>
                 </div>
