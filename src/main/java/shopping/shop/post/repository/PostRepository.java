@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import shopping.shop.post.domain.Post;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryCustom {
 
     Page<Post> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
 
@@ -21,4 +21,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Modifying
     @Query("update Post p set p.isAvailable = 1 where p.id = :postId")
     int updatePostIsAvailable(@Param("postId") Long postId);
+
 }

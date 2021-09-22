@@ -25,22 +25,22 @@
         <div>
             <table class="table">
                 <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>게시글명</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>조회수</th>
-                </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>게시글명</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>조회수</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr th:each="post : ${posts}">
-                    <td th:text="${post.id}">게시글 ID</a></td>
-                    <td><a href="post.html" th:href="@{|/board/${post.id}|}" th:text="${post.title}">게시글명</a></td>
-                    <td th:text="${post.userId}">작성자</td>
-                    <td th:text="${#temporals.format(post.LastModifiedDate,'yyyy-MM-dd HH:mm')}">수정일</td>
-                    <td th:text="${post.count}">조회수</td>
-                </tr>
+                    <tr th:each="post : ${posts}">
+                        <td th:text="${post.id}">게시글 ID</a></td>
+                        <td><a href="post.html" th:href="@{|/board/${post.id}|}" th:text="${post.title}">게시글명</a></td>
+                        <td th:text="${post.userId}">작성자</td>
+                        <td th:text="${#temporals.format(post.LastModifiedDate,'yyyy-MM-dd HH:mm')}">수정일</td>
+                        <td th:text="${post.count}">조회수</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -48,13 +48,13 @@
 
             <ul class="pagination justify-content-center" style="margin:20px 0"
                 th:with="start=${T(Math).floor(posts.number/pageSize) * pageSize + 1},
-                                 last=(${start + (pageSize-1) < posts.totalPages ? start + (pageSize-1) : posts.totalPages})">
+                                     last=(${start + (pageSize-1) < posts.totalPages ? start + (pageSize-1) : posts.totalPages})">
 
                 <th:block th:with="
-                                firstPage=@{/board/list(page=1,type=${param.type}, keyword=${param.keyword})},
-                                prevPage=@{/board/list(page=${posts.number},type=${param.type}, keyword=${param.keyword})},
-                                nextPage=@{/board/list(page=${posts.number + 2}, type=${param.type}, keyword=${param.keyword})},
-                                lastPage=@{/board/list(page=${posts.totalPages}, type=${param.type}, keyword=${param.keyword})}">
+                                    firstPage=@{/board/list(page=1,type=${param.searchType}, keyword=${param.keyword})},
+                                    prevPage=@{/board/list(page=${posts.number},type=${param.searchType}, keyword=${param.keyword})},
+                                    nextPage=@{/board/list(page=${posts.number + 2}, type=${param.searchType}, keyword=${param.keyword})},
+                                    lastPage=@{/board/list(page=${posts.totalPages}, type=${param.searchType}, keyword=${param.keyword})}">
 
                     <li th:class="${posts.first} ? 'page-item disabled' : 'page-item'">
                         <a th:class="page-link"
@@ -69,7 +69,7 @@
                     <li th:each="page: ${#numbers.sequence(start, last)}"
                         th:class="${page == posts.number + 1} ? 'page-item active' : 'page-item'">
                         <a th:class="page-link" th:text="${page}"
-                           th:href="@{/board/list(page=${page},type=${param.type}, keyword=${param.keyword})}"></a>
+                           th:href="@{/board/list(page=${page},type=${param.searchType}, keyword=${param.keyword})}"></a>
                     </li>
 
                     <li th:class="${posts.last} ? 'page-item disabled' : 'page-item'">
@@ -88,11 +88,11 @@
         <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
             <div class="form-group mx-sm-3 mb-2">
                 <div class="search">
-                    <select id="type" name="type">
-                        <option th:value="title" th:text="제목"/>
-                        제목</option>
-                        <option th:value="content" th:text="내용"/>
-                        내용</option>
+                    <select id="searchType" name="searchType">
+                        <option th:value="ALL" th:text="전체"/>전체</option>
+                        <option th:value="TITLE" th:text="제목"/>제목</option>
+                        <option th:value="CONTENT" th:text="내용"/>내용</option>
+                        <option th:value="WRITER" th:text="작성자"/>작성자</option>
                     </select>
 
                     <label for="keyword" class="sr-only">검색</label>

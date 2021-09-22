@@ -68,4 +68,5 @@ public class PostService {
     public void updatePostIsAvailable(Long postId) {
         postRepository.updatePostIsAvailable(postId);
     }
+
 }
