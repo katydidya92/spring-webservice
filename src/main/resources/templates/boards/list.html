@@ -26,7 +26,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>글번호</th>
                         <th>게시글명</th>
                         <th>작성자</th>
                         <th>작성일</th>
@@ -34,8 +34,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="post : ${posts}">
-                        <td th:text="${post.id}">게시글 ID</a></td>
+                    <tr th:each="post, i : ${posts}">
+                        <td th:text="${(posts.totalElements - (pageSize * posts.number-1)) - (i.index + 1 )}">글번호</td>
                         <td><a href="post.html" th:href="@{|/board/${post.id}|}" th:text="${post.title}">게시글명</a></td>
                         <td th:text="${post.userId}">작성자</td>
                         <td th:text="${#temporals.format(post.LastModifiedDate,'yyyy-MM-dd HH:mm')}">수정일</td>

@@ -77,10 +77,6 @@ public class BoardController {
 
         Page<Post> map = postService2.findAllByKeyword(param, pageable);
 
-        log.info("list = {}", map.getTotalPages());
-        log.info("list = {}", map.getPageable().getOffset());
-        log.info("list = {}", map.getPageable().getPageSize());
-
         model.addAttribute("pageSize", MyPageSize.PAGE_SIZE);
         model.addAttribute("posts", map);
         return "boards/list";
