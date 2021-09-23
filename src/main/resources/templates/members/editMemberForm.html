@@ -10,9 +10,9 @@
     <div class="container">
         <div th:replace="fragments/bodyHeader :: bodyHeader" />
         <div class="py-5 text-center">
-            <h2>회원 가입</h2>
+            <h2>회원 정보 수정</h2>
         </div>
-        <h4 class="mb-3">회원 정보 입력</h4>
+        <h4 class="mb-3">회원 정보 수정</h4>
         <form th:action th:object="${member}" method="post">
             <div th:if="${#fields.hasGlobalErrors()}">
                 <p class="field-error" th:each="err : ${#fields.globalErrors()}"
@@ -55,7 +55,7 @@
             <div>
                 <button class="w-100 btn btn-primary btn-lg"
                         th:onclick="findPostCode()"
-                        onclick="findPostCode()" type="button">주소 확인</button>
+                        onclick="findPostCode()" type="button">주소 수정</button>
             </div>
             <div>
                 <label for="zipcode">우편번호</label>
