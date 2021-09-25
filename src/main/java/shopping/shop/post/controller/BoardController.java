@@ -83,7 +83,8 @@ public class BoardController {
     }
 
     @GetMapping("/{postId}/edit")
-    public String openEditPost(@PathVariable Long postId, Model model) {
+    public String openEditPost(@PathVariable Long postId, Model model,
+                               @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
         Post post = postService.getById(postId);
 
         PostDto postDto = new PostDto();
@@ -94,7 +95,11 @@ public class BoardController {
 
         model.addAttribute("article", postDto);
 
-        return "boards/editPost";
+        if (member.getUserId() == post.getUserId()) {
+            return "boards/editPost";
+        }
+
+        return "redirect:/board/list";
     }
 
     @PostMapping("/{postId}/edit")

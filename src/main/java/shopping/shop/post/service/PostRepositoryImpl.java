@@ -8,11 +8,9 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shopping.shop.domain.MyPageSize;
 import shopping.shop.post.domain.Post;
 import shopping.shop.post.domain.PostIsAvailable;
 import shopping.shop.post.domain.PostParam;
@@ -88,4 +86,5 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     private BooleanExpression isAvailableEq(Integer postIsAvailable) {
         return isEmpty(postIsAvailable) ? null : post.isAvailable.eq(PostIsAvailable.postIsAvailable);
     }
+
 }
