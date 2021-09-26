@@ -2,19 +2,29 @@ package shopping.shop.item.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
 import shopping.shop.item.domain.Item;
 import shopping.shop.item.domain.ItemDto;
 import shopping.shop.item.repository.ItemRepository;
 import shopping.shop.item.service.ItemRepositoryImpl;
 import shopping.shop.login.session.SessionConst;
 import shopping.shop.member.domain.Member;
+import shopping.shop.upload.domian.UploadFile;
+import shopping.shop.upload.file.FileStore;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
@@ -25,6 +35,7 @@ public class ItemController {
 
     private final ItemRepository itemRepository;
     private final ItemRepositoryImpl itemService;
+    private final FileStore fileStore;
 
     @GetMapping
     public String items(Model model) {
@@ -43,7 +54,7 @@ public class ItemController {
     public String addItem(@Valid @ModelAttribute("item") ItemDto form,
                           BindingResult bindingResult,
                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
-                          RedirectAttributes attributes) {
+                          RedirectAttributes attributes) throws IOException {
 
         //특정 필드 예외가 아닌 전체 예외
         if (form.getPrice() != null && form.getQuantity() != null) {
@@ -58,7 +69,9 @@ public class ItemController {
             return "items/addForm";
         }
 
-        Item item = new Item(form.getItemName(), form.getPrice(), form.getQuantity(), member.getUserId());
+        UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
+
+        Item item = new Item(form.getItemName(), form.getPrice(), form.getQuantity(), member.getUserId(), attachFile);
 
         Item savedItem = itemRepository.save(item);
         attributes.addAttribute("Id", savedItem.getItemId());
