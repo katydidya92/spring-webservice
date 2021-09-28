@@ -21,6 +21,13 @@
                 </button>
             </div>
         </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <div>
+                <a href="post.html" th:href="@{|/board/list?sortType=ALL|}" th:text="초기화">초기화</a>
+                <a href="post.html" th:href="@{|/board/list?sortType=HITS|}" th:text="조회수">조회수순</a>
+                <a href="post.html" th:href="@{|/board/list?sortType=OLD|}" th:text="오래된순">오래된순</a>
+            </div>
+        </div>
         <hr class="my-4">
         <div>
             <table class="table">
@@ -51,10 +58,10 @@
                                      last=(${start + (pageSize-1) < posts.totalPages ? start + (pageSize-1) : posts.totalPages})">
 
                 <th:block th:with="
-                                    firstPage=@{/board/list(page=1,type=${param.searchType}, keyword=${param.keyword})},
-                                    prevPage=@{/board/list(page=${posts.number},type=${param.searchType}, keyword=${param.keyword})},
-                                    nextPage=@{/board/list(page=${posts.number + 2}, type=${param.searchType}, keyword=${param.keyword})},
-                                    lastPage=@{/board/list(page=${posts.totalPages}, type=${param.searchType}, keyword=${param.keyword})}">
+                                    firstPage=@{/board/list(page=1,type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})},
+                                    prevPage=@{/board/list(page=${posts.number},type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})},
+                                    nextPage=@{/board/list(page=${posts.number + 2}, type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})},
+                                    lastPage=@{/board/list(page=${posts.totalPages}, type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})}">
 
                     <li th:class="${posts.first} ? 'page-item disabled' : 'page-item'">
                         <a th:class="page-link"
@@ -69,7 +76,7 @@
                     <li th:each="page: ${#numbers.sequence(start, last)}"
                         th:class="${page == posts.number + 1} ? 'page-item active' : 'page-item'">
                         <a th:class="page-link" th:text="${page}"
-                           th:href="@{/board/list(page=${page},type=${param.searchType}, keyword=${param.keyword})}"></a>
+                           th:href="@{/board/list(page=${page},type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})}"></a>
                     </li>
 
                     <li th:class="${posts.last} ? 'page-item disabled' : 'page-item'">
@@ -97,6 +104,7 @@
 
                     <label for="keyword" class="sr-only">검색</label>
                     <input type="text" class="form-control" id="keyword" name="keyword" th:value="${param.keyword}">
+                    <input type="hidden" id="sortType" name="sortType" th:value="${param.sortType}">
                 </div>
             </div>
             <button type="submit" class="btn btn-light mb-2">검색</button>

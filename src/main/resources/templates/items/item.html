@@ -36,7 +36,7 @@
                th:text="${item.getAttachFile().getUploadFileName()}" id="downloadImage"/><br/>
         </div>
         <div>
-            <img th:src="@{|/images/${item.getAttachFile().getStoreFileName()}|}" width="300" height="300"/>
+            <img th:src="@{|/shopImages/${item.getAttachFile().getStoreFileName()}|}" width="300" height="300"/>
         </div>
 
         <hr class="my-4">

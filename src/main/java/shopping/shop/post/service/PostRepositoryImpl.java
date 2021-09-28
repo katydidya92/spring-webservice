@@ -17,7 +17,9 @@ import shopping.shop.post.domain.PostParam;
 import shopping.shop.post.repository.PostRepositoryCustom;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 import static shopping.shop.post.domain.QPost.post;
@@ -59,27 +61,40 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         // searchType & searchValue
         switch (param.getSearchType()) {
             case "ALL":
-                bb.and(post.title.contains(param.getValue())
-                        .or(post.content.contains(param.getValue()))
-                        .or(post.userId.contains(param.getValue())));
+                bb.and(post.title.contains(param.getSearchValue())
+                        .or(post.content.contains(param.getSearchValue()))
+                        .or(post.userId.contains(param.getSearchValue())));
                 break;
             case "TITLE":
-                bb.and(post.title.contains(param.getValue()));
+                bb.and(post.title.contains(param.getSearchValue()));
                 break;
             case "CONTENT":
-                bb.and(post.content.contains(param.getValue()));
+                bb.and(post.content.contains(param.getSearchValue()));
                 break;
             case "WRITER":
-                bb.and(post.userId.contains(param.getValue()));
+                bb.and(post.userId.contains(param.getSearchValue()));
                 break;
         }
 
         searchQuery.limit(pageable.getPageSize());
         searchQuery.offset(pageable.getOffset());
 
-        OrderSpecifier<Long> postId = post.id.desc();
+        OrderSpecifier<LocalDateTime> dateAsc = post.createdDate.asc();
+        OrderSpecifier<Long> idDesc = post.id.desc();
+        OrderSpecifier<Integer> countDesc = post.count.desc();
 
-        return searchQuery.distinct().where(bb).orderBy(postId);
+        switch (param.getSortType()) {
+            case "ALL":
+                searchQuery.orderBy(idDesc);
+                break;
+            case "HITS":
+                searchQuery.orderBy(countDesc);
+                break;
+            case "OLD":
+                searchQuery.orderBy(dateAsc);
+                break;
+        }
+        return searchQuery.distinct().where(bb);
 
     }
 

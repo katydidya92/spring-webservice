@@ -18,7 +18,7 @@ public class UploadController {
 
     private final FileStore fileStore;
 
-    @GetMapping("/images/{filename}")
+    @GetMapping("/shopImages/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(filename));
         log.info("resource={}", resource);

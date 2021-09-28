@@ -68,9 +68,10 @@ public class BoardController {
     @GetMapping("/list")
     public String openList(Pageable pageable, Model model,
                            @RequestParam(required = false, defaultValue = "ALL") String searchType,
-                           @RequestParam(required = false, defaultValue = "") String keyword) {
+                           @RequestParam(required = false, defaultValue = "") String keyword,
+                           @RequestParam(required = false, defaultValue = "ALL") String sortType) {
 
-        PostParam param = new PostParam(searchType, keyword);
+        PostParam param = new PostParam(searchType, keyword, sortType);
 
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
         pageable = PageRequest.of(page, MyPageSize.PAGE_SIZE);

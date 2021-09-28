@@ -8,10 +8,13 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class PostParam {
     private String searchType;
-    private String value;
+    private String searchValue;
 
-    public PostParam(String searchType, String value) {
+    private String sortType;
+
+    public PostParam(String searchType, String searchValue, String sortType) {
         this.searchType = searchType;
-        this.value = value;
+        this.searchValue = searchValue;
+        this.sortType = sortType;
     }
 }
