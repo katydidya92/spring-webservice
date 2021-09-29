@@ -56,7 +56,11 @@ public class BoardController {
 
         String userId = (String) session.getAttribute("userId");
 
-        Post post = new Post(userId, postDto.getTitle(), postDto.getContent());
+        Post post = Post.builder()
+                .userId(userId)
+                .title(postDto.getTitle())
+                .content(postDto.getContent())
+                .build();
 
         Post savedPost = postService.save(post);
         attributes.addAttribute("Id", savedPost.getId());
@@ -71,7 +75,10 @@ public class BoardController {
                            @RequestParam(required = false, defaultValue = "") String keyword,
                            @RequestParam(required = false, defaultValue = "ALL") String sortType) {
 
-        PostParam param = new PostParam(searchType, keyword, sortType);
+        PostParam param = PostParam.builder()
+                .searchType(searchType)
+                .searchValue(keyword)
+                .sortType(sortType).build();
 
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
         pageable = PageRequest.of(page, MyPageSize.PAGE_SIZE);

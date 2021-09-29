@@ -1,5 +1,6 @@
 package shopping.shop.item.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shopping.shop.domain.BaseTimeEntity;
@@ -31,7 +32,8 @@ public class Item extends BaseTimeEntity {
         this.quantity = quantity;
         this.userId = userId;
     }
-//
+
+    @Builder
     public Item(String itemName, Integer price, Integer quantity, String userId, UploadFile attachFile) {
         this.itemName = itemName;
         this.price = price;

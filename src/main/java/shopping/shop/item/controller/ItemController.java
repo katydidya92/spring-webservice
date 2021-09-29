@@ -71,7 +71,13 @@ public class ItemController {
 
         UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
 
-        Item item = new Item(form.getItemName(), form.getPrice(), form.getQuantity(), member.getUserId(), attachFile);
+        Item item = Item.builder()
+                .itemName(form.getItemName())
+                .price(form.getPrice())
+                .quantity(form.getQuantity())
+                .userId(member.getUserId())
+                .attachFile(attachFile)
+                .build();
 
         Item savedItem = itemRepository.save(item);
         attributes.addAttribute("Id", savedItem.getItemId());

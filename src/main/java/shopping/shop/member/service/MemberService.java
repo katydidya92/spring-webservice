@@ -34,12 +34,12 @@ public class MemberService {
         memberData.setAge(member.getAge());
         memberData.setName(member.getName());
         memberData.setEmail(member.getEmail());
-        memberData.setAddress(new Address(
-                member.getAddress().getZipcode(),
-                member.getAddress().getRoadAddr(),
-                member.getAddress().getAddrDetail(),
-                member.getAddress().getAdEtc()
-        ));
+        memberData.setAddress(Address.builder()
+                .zipcode(member.getAddress().getZipcode())
+                .roadAddr(member.getAddress().getRoadAddr())
+                .addrDetail(member.getAddress().getAddrDetail())
+                .adEtc(member.getAddress().getAdEtc()).build()
+        );
         log.info("memberData2={}", memberData.getAddress().getZipcode());
     }
 

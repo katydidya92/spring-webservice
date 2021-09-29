@@ -1,9 +1,6 @@
 package shopping.shop.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 
@@ -17,6 +14,7 @@ public class Address {
     private String addrDetail;
     private String adEtc;
 
+    @Builder
     public Address(String zipcode, String roadAddr, String addrDetail, String adEtc) {
         this.zipcode = zipcode;
         this.roadAddr = roadAddr;

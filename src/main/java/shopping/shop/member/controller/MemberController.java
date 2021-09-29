@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import shopping.shop.domain.Address;
 import shopping.shop.member.domain.Member;
@@ -13,6 +12,7 @@ import shopping.shop.member.domain.MemberDto;
 import shopping.shop.member.service.MemberService;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -30,7 +30,7 @@ public class MemberController {
     }
 
     @PostMapping("/add")
-    public String save(@Validated @ModelAttribute("member") MemberDto dto,
+    public String save(@Valid @ModelAttribute("member") MemberDto dto,
                        BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -38,21 +38,26 @@ public class MemberController {
             return "members/addMemberForm";
         }
 
-        Member member = new Member();
+        Address address = Address.builder()
+                .zipcode(dto.getZipcode())
+                .roadAddr(dto.getRoadAddr())
+                .addrDetail(dto.getAddrDetail())
+                .adEtc(dto.getAdEtc()).build();
 
-        Address address = new Address(dto.getZipcode(), dto.getRoadAddr(), dto.getAddrDetail(), dto.getAdEtc());
+        Member member = Member.builder()
+                .age(dto.getAge())
+                .email(dto.getEmail())
+                .name(dto.getName())
+                .userId(dto.getUserId())
+                .userPw(dto.getUserPw())
+                .address(address)
+                .build();
 
-        member.setAge(dto.getAge());
-        member.setEmail(dto.getEmail());
-        member.setName(dto.getName());
-        member.setUserId(dto.getUserId());
-        member.setUserPw(dto.getUserPw());
-        member.setAddress(address);
         log.info("members={}", member);
 
         memberService.join(member);
 
-        return "redirect:/";
+        return "redirect:/login";
     }
 
     @GetMapping("/list")

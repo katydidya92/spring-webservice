@@ -1,5 +1,6 @@
 package shopping.shop.member.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,6 +37,7 @@ public class Member extends BaseTimeEntity {
         this.userPw = userPw;
     }
 
+    @Builder
     public Member(String userId, String userPw, String name, int age, String email, Address address) {
         this.userId = userId;
         this.userPw = userPw;
