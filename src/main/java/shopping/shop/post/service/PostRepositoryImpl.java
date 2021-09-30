@@ -11,8 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shopping.shop.domain.IsAvailable;
 import shopping.shop.post.domain.Post;
-import shopping.shop.post.domain.PostIsAvailable;
 import shopping.shop.post.domain.PostParam;
 import shopping.shop.post.repository.PostRepositoryCustom;
 
@@ -53,7 +53,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         JPAQuery<Post> searchQuery = query
                 .selectFrom(post)
-                .where(isAvailableEq(PostIsAvailable.postIsAvailable));
+                .where(isAvailableEq(IsAvailable.IsAvailable));
 
         BooleanBuilder bb = new BooleanBuilder();
 
@@ -98,7 +98,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     private BooleanExpression isAvailableEq(Integer postIsAvailable) {
-        return isEmpty(postIsAvailable) ? null : post.isAvailable.eq(PostIsAvailable.postIsAvailable);
+        return isEmpty(postIsAvailable) ? null : post.isAvailable.eq(IsAvailable.IsAvailable);
     }
 
 }

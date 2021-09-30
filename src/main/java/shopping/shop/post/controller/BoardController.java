@@ -137,8 +137,10 @@ public class BoardController {
         log.info("boardController : likeCheck= {}", likeCheck);
 
         List<Comment> cmts = commentService.findAllById(postId);
+        List<Comment> reCmt = commentService.findAllRelistById(postId);
         model.addAttribute("article", post);
         model.addAttribute("cmts", cmts);
+        model.addAttribute("reCmt", reCmt);
         model.addAttribute("member", member);
         model.addAttribute("likeCheck", likeCheck);
 

@@ -5,13 +5,16 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.shop.comment.domain.Comment;
+import shopping.shop.comment.domain.QComment;
 import shopping.shop.comment.repository.CommentRepositoryCustom;
+import shopping.shop.domain.IsAvailable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 import static shopping.shop.comment.domain.QComment.comment;
+import static shopping.shop.post.domain.QPost.post;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,6 +30,15 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     public List<Comment> findAllById(Long postId) {
         return query.selectFrom(comment)
                 .where(postIdEq(postId))
+                .where(isAvailableEq(IsAvailable.IsAvailable))
+                .fetch();
+    }
+
+    @Override
+    public List<Comment> findAllRelistById(Long postId) {
+        return query.selectFrom(comment)
+                .where(postIdEq(postId))
+                .where(isNotAvailableEq(IsAvailable.IsAvailable))
                 .fetch();
     }
 
@@ -56,4 +68,10 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
         return isEmpty(cmtId) ? null : comment.commentId.eq(cmtId);
     }
 
+    private BooleanExpression isAvailableEq(Integer cmtReplyNumIsZero) {
+        return isEmpty(cmtReplyNumIsZero) ? null : comment.cmtReplyId.eq(Long.valueOf(IsAvailable.IsAvailable));
+    }
+    private BooleanExpression isNotAvailableEq(Integer cmtReplyNumIsZero) {
+        return isEmpty(cmtReplyNumIsZero) ? null : comment.cmtReplyId.ne(Long.valueOf(IsAvailable.IsAvailable));
+    }
 }

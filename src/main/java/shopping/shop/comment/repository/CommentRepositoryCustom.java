@@ -8,6 +8,8 @@ public interface CommentRepositoryCustom  {
 
     List<Comment> findAllById(Long postId);
 
+    List<Comment> findAllRelistById(Long postId);
+
     void updateComment(Comment comment, Long postId);
 
     void deleteComment(Long cmtId);

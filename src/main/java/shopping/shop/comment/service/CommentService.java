@@ -13,10 +13,10 @@ import shopping.shop.post.repository.PostRepository;
 
 import java.util.Optional;
 
-@Service
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
 @Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentService {
 
     private final LoginRepository loginRepository;
@@ -24,7 +24,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public Long commentWrite(Comment comment, Member member, Long postId) {
+    public void commentWrite(Comment comment, Member member, Long postId) {
 
         Optional<Member> writer = loginRepository.findByLoginId(member.getUserId());
         Optional<Post> board = postRepository.findById(postId);
@@ -32,9 +32,12 @@ public class CommentService {
         comment.setPost(board.get());
         comment.setMember(writer.get());
 
-        Comment cmt = commentRepository.save(comment);
+        commentRepository.save(comment);
+    }
 
-        return cmt.getCommentId();
+    @Transactional
+    public void cmtReplyWrite(Comment comment) {
+        commentRepository.save(comment);
     }
 
     public Comment getById(Long cmtId) {

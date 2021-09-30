@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>대댓글</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+</head>
+<body>
+    <div class="container">
+        <div th:replace="fragments/bodyHeader :: bodyHeader" />
+        <div class="py-5 text-center">
+            <h2 >대댓글</h2>
+        </div>
+
+        <form th:action th:object="${comment}" method="post">
+
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+                   th:text="${err}">글로벌 오류 메시지</p>
+            </div>
+            <div>
+                <input type="hidden" id="cmtReplyId" name="cmtReplyId" th:value="*{commentId}">
+                <input type="hidden" id="commentId" th:field="*{commentId}">
+                <input type="hidden" id="postId" th:field="*{post.id}">
+            </div>
+            <div>
+                <label for="cmtContent" >이전 댓글 내용</label>
+                <input type="text" id="cmtContent" th:field="*{cmtContent}"
+                       th:errorclass="field-error" class="form-control"
+                       placeholder="내용을 입력하세요" disabled>
+                <div class="field-error" th:errors="*{cmtContent}">
+                    게시글 내용 오류
+                </div>
+            </div>
+            <div>
+                <label for="cmtReplyContent" >댓글 쓰기</label>
+                <input type="text" id="cmtReplyContent" name="cmtContent" value=""
+                       th:errorclass="field-error" class="form-control"
+                       placeholder="내용을 입력하세요">
+                <div class="field-error" th:errors="*{cmtContent}">
+                    게시글 내용 오류
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col">
+                    <button class="w-100 btn btn-primary btn-lg" type="submit">저장</button>
+                </div>
+                <div class="col">
+                    <button class="w-100 btn btn-secondary btn-lg"
+                            onclick="location.href='list.html'"
+                            th:onclick="|location.href='@{|/board/${comment.post.id}|}'|"
+                            type="button">취소</button>
+                </div>
+            </div>
+        </form>
+    </div> <!-- /container -->
+</body>
+</html>
