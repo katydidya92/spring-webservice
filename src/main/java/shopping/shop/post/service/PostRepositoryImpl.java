@@ -19,7 +19,6 @@ import shopping.shop.post.repository.PostRepositoryCustom;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Locale;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 import static shopping.shop.post.domain.QPost.post;

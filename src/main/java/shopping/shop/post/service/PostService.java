@@ -30,38 +30,17 @@ public class PostService {
         return postRepository.getById(postId);
     }
 
-    public List<Post> findAll() {
-        return postRepository.findAll();
-    }
-
-    public Page<Post> findAll(Pageable pageable) {
-        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
-        pageable = PageRequest.of(page, MyPageSize.PAGE_SIZE);
-        return postRepository.findAll(pageable);
-    }
-
     @Transactional
     public void updatePost(Long postId, String title, String content) {
         Post post = postRepository.getById(postId);
 
-        post.setTitle(title);
+        post.setTitle(title+"(수정)");
         post.setContent(content);
-    }
-
-    public Page<Post> search(String title, String content, Pageable pageable) {
-        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
-        pageable = PageRequest.of(page, MyPageSize.PAGE_SIZE);
-        return postRepository.findByTitleContainingOrContentContaining(title, content, pageable);
     }
 
     @Transactional
     public int updateHitById(Long id) {
         return postRepository.updateHitById(id);
-    }
-
-    @Transactional
-    public void deletePost(Long postId) {
-        postRepository.deleteById(postId);
     }
 
     @Transactional
