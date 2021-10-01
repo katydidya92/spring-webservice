@@ -26,6 +26,8 @@ public class Member extends BaseTimeEntity {
     private int age;
     private String email;
 
+    private String memberRole;
+
     @Embedded
     private Address address;
 
