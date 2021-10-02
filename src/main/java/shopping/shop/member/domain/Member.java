@@ -9,6 +9,7 @@ import shopping.shop.domain.BaseTimeEntity;
 import shopping.shop.comment.domain.Comment;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -20,10 +21,15 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
+    @NotNull
     private String userId;
+    @NotNull
     private String userPw;
+    @NotNull
     private String name;
+    @NotNull
     private int age;
+    @NotNull
     private String email;
 
     private String memberRole;

@@ -106,7 +106,8 @@ public class MemberController {
      */
     @PostConstruct
     public void init() {
-        memberService.join(new Member("test!", "test!"));
+        memberService.join(new Member("test!", "test!", "asd", 10, "asd@asd",
+                new Address("06112", "서울 강남구 논현로123길 4-1", "123", "(논현동)")));
         memberService.join(new Member("asd", "asd", "asd", 10, "asd@asd",
                 new Address("06112", "서울 강남구 논현로123길 4-1", "123", "(논현동)")));
     }
