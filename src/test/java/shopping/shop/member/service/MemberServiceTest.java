@@ -61,4 +61,18 @@ class MemberServiceTest {
         assertThat(findMember2).isEqualTo(member2);
     }
 
+    @Test
+    public void updateMember() throws Exception {
+        //given(주어지는 값)
+        Long memberId = memberService.findMembers().get(0).getId();
+        Member member = memberService.findOne(memberId);
+
+        //when(조건)
+        member.setAge(20);
+        member.setEmail("fdke@naver.com");
+
+        //then(테스트)
+        memberService.updateMember(memberId, member);
+    }
+
 }
