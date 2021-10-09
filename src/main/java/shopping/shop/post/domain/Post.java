@@ -19,7 +19,7 @@ import java.util.List;
 public class Post extends BaseTimeEntity {
 
     @Id @GeneratedValue
-    @Column(name = "post_id")
+    @Column(name = "id")
     private Long id;
 
     private String userId;

@@ -18,7 +18,7 @@ import java.util.List;
 public class Member extends BaseTimeEntity {
 
     @Id @GeneratedValue
-    @Column(name = "member_id")
+    @Column(name = "id")
     private Long id;
 
     @NotNull
