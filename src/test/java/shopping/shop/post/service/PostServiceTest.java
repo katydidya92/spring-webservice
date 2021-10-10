@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import shopping.shop.post.domain.Post;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @Commit
@@ -31,4 +30,15 @@ class PostServiceTest {
         assertThat(post.getContent()).isEqualTo("sdfjksd");
 
     }
+
+    @Test
+    @Transactional
+    public void updateHit() {
+
+        Long postId = postService.getById(4L).getId();
+        postService.updateHitById(postId);
+        int count = postService.getById(postId).getCount();
+        assertThat(count).isEqualTo(1);
+    }
+
 }
