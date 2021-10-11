@@ -24,17 +24,16 @@ public class CommentController {
     private final CommentService service;
     private final CommentRepositoryImpl cmtService;
 
-    @PostMapping("board/{postId}/comment_write")
+    @PostMapping("boards/{postId}/comment_write")
     public String addComment(@ModelAttribute Comment comment,
                              @PathVariable Long postId,
-                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER,
-                                     required = false) Member member) {
+                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
         service.commentWrite(comment, member, postId);
-        return "redirect:/board/{postId}";
+        return "redirect:/boards/{postId}";
     }
 
-    @GetMapping("board/{postId}/{cmtId}/comment_reply")
+    @GetMapping("boards/{postId}/{cmtId}/comment_reply")
     public String addCmtReplyOpen(Model model,
                                   @PathVariable Long postId,
                                   @PathVariable Long cmtId,
@@ -48,7 +47,7 @@ public class CommentController {
         return "comments/replyCmt";
     }
 
-    @PostMapping("board/{postId}/{cmtId}/comment_reply")
+    @PostMapping("boards/{postId}/{cmtId}/comment_reply")
     public String addCmtReply(@ModelAttribute Comment comment,
                               @PathVariable Long postId,
                               @PathVariable Long cmtId,
@@ -62,10 +61,10 @@ public class CommentController {
                 .build();
 
         service.cmtReplyWrite(cmt);
-        return "redirect:/board/{postId}";
+        return "redirect:/boards/{postId}";
     }
 
-    @GetMapping("board/{postId}/{cmtId}/comment_edit")
+    @GetMapping("boards/{postId}/{cmtId}/comment_edit")
     public String editCommentOpen(@PathVariable Long cmtId,
                                   @PathVariable Long postId,
                                   Model model) {
@@ -76,7 +75,7 @@ public class CommentController {
         return "comments/editComment";
     }
 
-    @PostMapping("board/{postId}/{cmtId}/comment_edit")
+    @PostMapping("boards/{postId}/{cmtId}/comment_edit")
     public String editComment(@ModelAttribute Comment comment,
                               @PathVariable Long cmtId,
                               @PathVariable Long postId,
@@ -88,15 +87,15 @@ public class CommentController {
         }
 
         cmtService.updateComment(comment, cmtId);
-        return "redirect:/board/{postId}";
+        return "redirect:/boards/{postId}";
     }
 
-    @GetMapping("board/{postId}/{cmtId}/comment_delete")
+    @GetMapping("boards/{postId}/{cmtId}/comment_delete")
     public String deleteComment(@PathVariable Long cmtId, @PathVariable Long postId) {
 
         cmtService.deleteComment(cmtId);
 
-        return "redirect:/board/{postId}";
+        return "redirect:/boards/{postId}";
     }
 
 }

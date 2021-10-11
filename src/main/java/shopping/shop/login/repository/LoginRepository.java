@@ -17,9 +17,10 @@ public class LoginRepository {
     private final EntityManager em;
 
     public Optional<Member> findByLoginId(String loginId) {
-        return findAll().stream()
+        Optional<Member> userId = findAll().stream()
                 .filter(m -> m.getUserId().equals(loginId))
                 .findFirst();
+        return userId;
     }
 
     public List<Member> findAll() {

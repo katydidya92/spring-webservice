@@ -14,6 +14,7 @@ import shopping.shop.login.session.SessionConst;
 @Controller
 @RequiredArgsConstructor
 public class LikeController {
+
     private final LikeService likeService;
 
     @GetMapping("board/{postId}/like")
@@ -23,8 +24,7 @@ public class LikeController {
         if (member != null) {
             likeService.addLike(member, postId);
         }
-
-        return "redirect:/board/{postId}";
+        return "redirect:/boards/{postId}";
     }
 
     @GetMapping("board/{postId}/unlike")
@@ -34,8 +34,7 @@ public class LikeController {
         if (member != null) {
             likeService.unlike(member, postId);
         }
-
-        return "redirect:/board/{postId}";
+        return "redirect:/boards/{postId}";
     }
 
 }

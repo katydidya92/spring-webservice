@@ -31,7 +31,7 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/board")
+@RequestMapping("/boards")
 public class BoardController {
 
     private final PostService postService;
@@ -39,14 +39,14 @@ public class BoardController {
     private final CommentRepositoryImpl commentService;
     private final LikeService likeService;
 
-    @GetMapping("/add")
+    @GetMapping("/")
     public String openAddPost(Model model) {
         model.addAttribute("article", new Post());
         model.addAttribute("member", new MemberDto());
         return "boards/addPost";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public String addPost(@Valid @ModelAttribute("article") PostDto postDto, HttpSession session, BindingResult bindingResult, RedirectAttributes attributes) {
 
         if (bindingResult.hasErrors()) {
@@ -66,7 +66,7 @@ public class BoardController {
         attributes.addAttribute("Id", savedPost.getId());
         attributes.addAttribute("status", true);
 
-        return "redirect:/board/{Id}";
+        return "redirect:/boards/{Id}";
     }
 
     @GetMapping("/list")
@@ -95,19 +95,16 @@ public class BoardController {
                                @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
         Post post = postService.getById(postId);
 
-        PostDto postDto = new PostDto();
-        postDto.setId(post.getId());
-        postDto.setTitle(post.getTitle());
-        postDto.setContent(post.getContent());
-        postDto.setUserId(post.getUserId());
+        PostDto postDto = PostDto.builder()
+                .post(post)
+                .build();
 
         model.addAttribute("article", postDto);
 
         if (member.getUserId() == post.getUserId()) {
             return "boards/editPost";
         }
-
-        return "redirect:/board/list";
+        return "redirect:/boards/list";
     }
 
     @PostMapping("/{postId}/edit")
@@ -122,7 +119,7 @@ public class BoardController {
 
         postService.updatePost(postId, postDto.getTitle(), postDto.getContent());
 
-        return "redirect:/board/{postId}";
+        return "redirect:/boards/{postId}";
     }
 
     @GetMapping("/{postId}")
@@ -152,7 +149,7 @@ public class BoardController {
 
         postService.updatePostIsAvailable(postId);
 
-        return "redirect:/board/list ";
+        return "redirect:/boards/list ";
     }
 
     /**

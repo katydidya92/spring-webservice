@@ -16,16 +16,16 @@
             <div class="col">
                 <button class="btn btn-primary float-end"
                         onclick="location.href='addPost.html'"
-                        th:onclick="|location.href='@{/board/add}'|"
+                        th:onclick="|location.href='@{/boards/}'|"
                         type="button">게시글 등록
                 </button>
             </div>
         </div>
         <div class="form-group mx-sm-3 mb-2">
             <div>
-                <a href="post.html" th:href="@{|/board/list?sortType=ALL|}" th:text="초기화">초기화</a>
-                <a href="post.html" th:href="@{|/board/list?sortType=HITS|}" th:text="조회수">조회수순</a>
-                <a href="post.html" th:href="@{|/board/list?sortType=OLD|}" th:text="오래된순">오래된순</a>
+                <a href="post.html" th:href="@{|/boards/list?sortType=ALL|}" th:text="초기화">초기화</a>
+                <a href="post.html" th:href="@{|/boards/list?sortType=HITS|}" th:text="조회수">조회수순</a>
+                <a href="post.html" th:href="@{|/boards/list?sortType=OLD|}" th:text="오래된순">오래된순</a>
             </div>
         </div>
         <hr class="my-4">
@@ -43,7 +43,7 @@
                 <tbody>
                     <tr th:each="post, i : ${posts}">
                         <td th:text="${(posts.totalElements - (pageSize * posts.number-1)) - (i.index + 1 )}">글번호</td>
-                        <td><a href="post.html" th:href="@{|/board/${post.id}|}" th:text="${post.title}">게시글명</a></td>
+                        <td><a href="post.html" th:href="@{|/boards/${post.id}|}" th:text="${post.title}">게시글명</a></td>
                         <td th:text="${post.userId}">작성자</td>
                         <td th:text="${#temporals.format(post.LastModifiedDate,'yyyy-MM-dd HH:mm')}">수정일</td>
                         <td th:text="${post.count}">조회수</td>
@@ -58,10 +58,10 @@
                                      last=(${start + (pageSize-1) < posts.totalPages ? start + (pageSize-1) : posts.totalPages})">
 
                 <th:block th:with="
-                                    firstPage=@{/board/list(page=1,type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})},
-                                    prevPage=@{/board/list(page=${posts.number},type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})},
-                                    nextPage=@{/board/list(page=${posts.number + 2}, type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})},
-                                    lastPage=@{/board/list(page=${posts.totalPages}, type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})}">
+                                    firstPage=@{/boards/list(page=1,type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})},
+                                    prevPage=@{/boards/list(page=${posts.number},type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})},
+                                    nextPage=@{/boards/list(page=${posts.number + 2}, type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})},
+                                    lastPage=@{/boards/list(page=${posts.totalPages}, type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})}">
 
                     <li th:class="${posts.first} ? 'page-item disabled' : 'page-item'">
                         <a th:class="page-link"
@@ -76,7 +76,7 @@
                     <li th:each="page: ${#numbers.sequence(start, last)}"
                         th:class="${page == posts.number + 1} ? 'page-item active' : 'page-item'">
                         <a th:class="page-link" th:text="${page}"
-                           th:href="@{/board/list(page=${page},type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})}"></a>
+                           th:href="@{/boards/list(page=${page},type=${param.searchType}, keyword=${param.keyword}, sort=${param.sortType})}"></a>
                     </li>
 
                     <li th:class="${posts.last} ? 'page-item disabled' : 'page-item'">
@@ -92,7 +92,7 @@
             </ul>
         </div>
 
-        <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
+        <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/boards/list}">
             <div class="form-group mx-sm-3 mb-2">
                 <div class="search">
                     <select id="searchType" name="searchType">
@@ -110,7 +110,7 @@
             <button type="submit" class="btn btn-light mb-2">검색</button>
             <button class="btn btn-light mb-2"
                     onclick="location.href='list.html'"
-                    th:onclick="|location.href='@{/board/list}'|"
+                    th:onclick="|location.href='@{/boards/list}'|"
                     type="button">취소
             </button>
         </form>

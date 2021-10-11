@@ -1,5 +1,6 @@
 package shopping.shop.post.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class PostDto {
 
     private int count;
 
+    @Builder
     public PostDto(Post post) {
         this.id = post.getId();
         this.userId = post.getUserId();

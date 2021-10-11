@@ -43,6 +43,4 @@ public class CommentService {
     public Comment getById(Long cmtId) {
         return commentRepository.getById(cmtId);
     }
-
-
 }
