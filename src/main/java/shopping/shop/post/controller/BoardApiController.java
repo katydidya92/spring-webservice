@@ -2,9 +2,7 @@ package shopping.shop.post.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shopping.shop.post.domain.Post;
 import shopping.shop.post.repository.PostRepository;
 
@@ -28,6 +26,11 @@ public class BoardApiController {
     Optional<Post> postOne() {
         Optional<Post> post = postRepository.findById(3L);
         return post;
+    }
+
+    @DeleteMapping("/{id}")
+    void deleteBoard(@PathVariable Long id) {
+        postRepository.deleteById(id);
     }
 
 }

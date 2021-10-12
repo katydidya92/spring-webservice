@@ -43,6 +43,8 @@
                         class="w-100 btn btn-primary btn-lg"
                         th:onclick="|location.href='@{|/boards/${article.id}/delete|}'|"
                         type="button" >게시글 삭제</button>
+                <button type="button" class="btn btn-primary"
+                        th:onclick="|deleteBoard(*{article.id})|">삭제</button>
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
@@ -128,6 +130,22 @@
                 <button class="btn btn-light mb-2" type="submit">댓글쓰기</button>
             </form>
         </div>
+
+        <footer th:replace="fragments/header :: footer"></footer>
+        <script>
+            function deleteBoard(id) {
+                //DELETE /api/boards/{id}
+                $.ajax({
+                    url: '/api/boards/' + id,
+                    type: 'DELETE',
+                    success: function(result) {
+                        console.log('result', result);
+                        alert('삭제됐습니다.');
+                        window.location.href = '/boards/list';
+                    }
+                });
+            }
+        </script>
 
     </div> <!-- /container -->
 </body>
