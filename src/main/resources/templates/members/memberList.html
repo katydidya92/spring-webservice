@@ -26,7 +26,7 @@
                     <td th:text="${member.email}"></td>
                     <td th:text="${member.age}"></td>
                     <td>
-                        <a href="#" th:href="@{/members/{id}/edit (id=${member.id})}"
+                        <a href="#" th:href="@{|/members/${member.id}/edit|}"
                            class="btn btn-primary" role="button">수정</a>
                     </td>
                 </tr>

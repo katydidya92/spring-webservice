@@ -36,6 +36,7 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "int default 0")
     private int isAvailable ;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Like> likes;
 
