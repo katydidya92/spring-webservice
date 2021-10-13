@@ -18,10 +18,10 @@ function unlikes(id) {
     });
 }
 
-function deleteBoard(id) {
+function deletePost(id) {
     $.ajax({
         url: '/api/boards/' + id,
-        type: 'DELETE',
+        type: 'PUT',
         success: function(result) {
             console.log('result', result);
             alert('삭제됐습니다.');
@@ -29,3 +29,4 @@ function deleteBoard(id) {
         }
     });
 }
+

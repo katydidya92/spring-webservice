@@ -42,22 +42,20 @@ public class BoardController {
     @GetMapping("/")
     public String openAddPost(Model model) {
         model.addAttribute("article", new Post());
-        model.addAttribute("member", new MemberDto());
         return "boards/addPost";
     }
 
     @PostMapping("/")
-    public String addPost(@Valid @ModelAttribute("article") PostDto postDto, HttpSession session, BindingResult bindingResult, RedirectAttributes attributes) {
+    public String addPost(@Valid @ModelAttribute("article") PostDto postDto, BindingResult bindingResult, RedirectAttributes attributes,
+                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "boards/addPost";
         }
 
-        String userId = (String) session.getAttribute("userId");
-
         Post post = Post.builder()
-                .userId(userId)
+                .userId(member.getUserId())
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
                 .build();
@@ -142,14 +140,6 @@ public class BoardController {
         model.addAttribute("likeCheck", likeCheck);
 
         return "boards/post";
-    }
-
-    @GetMapping("/{postId}/delete")
-    public String postDelete(@PathVariable Long postId) {
-
-        postService.updatePostIsAvailable(postId);
-
-        return "redirect:/boards/list ";
     }
 
     /**
