@@ -61,13 +61,13 @@
                  id="unlikeImg" alt="unlike"
                  src="/images/unlike.png"
                  th:src="@{/images/unlike.png}" width="40" height="40"
-                 th:onclick="|location.href='@{|/board/${article.id}/like|}'|">
+                 th:onclick="|likes(*{article.id})|">
 
             <img th:if="${likeCheck} == false"
                  id="likeImg" alt="like"
                  src="/images/like.png"
                  th:src="@{/images/like.png}" width="40" height="40"
-                 th:onclick="|location.href='@{|/board/${article.id}/unlike|}'|">
+                 th:onclick="|unlikes(*{article.id})|">
         </div>
 
         <hr class="my-4">
@@ -123,7 +123,7 @@
         </table>
 
         <div class="input-group mb-3">
-            <form class="form-inline d-flex justify-content-end" th:action="@{|/board/${article.id}/comment_write|}" method="post">
+            <form class="form-inline d-flex justify-content-end" th:action="@{|/boards/${article.id}/comment_write|}" method="post">
                 <input type="text" id="cmtContent" name="cmtContent" class="form-control" placeholder="댓글을 입력해주세요">
                 <input type="hidden" id="cmtPostId" name="postId" th:value="${article.id}">
                 <input type="hidden" id="cmtReplyId" name="cmtReplyId" th:value="0">
@@ -132,20 +132,7 @@
         </div>
 
         <footer th:replace="fragments/header :: footer"></footer>
-        <script>
-            function deleteBoard(id) {
-                //DELETE /api/boards/{id}
-                $.ajax({
-                    url: '/api/boards/' + id,
-                    type: 'DELETE',
-                    success: function(result) {
-                        console.log('result', result);
-                        alert('삭제됐습니다.');
-                        window.location.href = '/boards/list';
-                    }
-                });
-            }
-        </script>
+        <script th:src="@{/js/postJS.js}"></script>
 
     </div> <!-- /container -->
 </body>
