@@ -39,31 +39,43 @@ public class BoardController {
     private final CommentRepositoryImpl commentService;
     private final LikeService likeService;
 
-    @GetMapping("/")
-    public String openAddPost(Model model) {
-        model.addAttribute("article", new Post());
-        return "boards/addPost";
+    @GetMapping("/form")
+    public String openPost(@RequestParam(required = false) Long id, Model model,
+                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+        if (id == null) {
+            model.addAttribute("article", new Post());
+        } else {
+            Post post = postService.getById(id);
+            PostDto postDto = PostDto.builder().post(post).build();
+            model.addAttribute("article", postDto);
+        }
+        return "boards/writePost";
     }
 
-    @PostMapping("/")
-    public String addPost(@Valid @ModelAttribute("article") PostDto postDto, BindingResult bindingResult, RedirectAttributes attributes,
+    @PostMapping("/form")
+    public String addPost(@RequestParam(required = false) Long id,
+                          @Valid @ModelAttribute("article") PostDto postDto, BindingResult bindingResult, RedirectAttributes attributes,
                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
-            return "boards/addPost";
+            return "boards/writePost";
         }
 
-        Post post = Post.builder()
-                .userId(member.getUserId())
-                .title(postDto.getTitle())
-                .content(postDto.getContent())
-                .build();
+        if (id == null) {
+            Post post = Post.builder()
+                    .userId(member.getUserId())
+                    .title(postDto.getTitle())
+                    .content(postDto.getContent())
+                    .build();
 
-        Post savedPost = postService.save(post);
-        attributes.addAttribute("Id", savedPost.getId());
-        attributes.addAttribute("status", true);
-
+            Post savedPost = postService.save(post);
+            attributes.addAttribute("Id", savedPost.getId());
+            attributes.addAttribute("status", true);
+        } else {
+            postService.updatePost(postDto.getId(), postDto.getTitle(), postDto.getContent());
+            attributes.addAttribute("Id", id);
+        }
         return "redirect:/boards/{Id}";
     }
 
@@ -86,38 +98,6 @@ public class BoardController {
         model.addAttribute("pageSize", MyPageSize.PAGE_SIZE);
         model.addAttribute("posts", map);
         return "boards/list";
-    }
-
-    @GetMapping("/{postId}/edit")
-    public String openEditPost(@PathVariable Long postId, Model model,
-                               @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
-        Post post = postService.getById(postId);
-
-        PostDto postDto = PostDto.builder()
-                .post(post)
-                .build();
-
-        model.addAttribute("article", postDto);
-
-        if (member.getUserId() == post.getUserId()) {
-            return "boards/editPost";
-        }
-        return "redirect:/boards/list";
-    }
-
-    @PostMapping("/{postId}/edit")
-    public String updatePost(@PathVariable Long postId, @ModelAttribute("article") PostDto postDto, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            return "boards/editPost";
-        }
-
-        log.info("edit title = {}, detail = {}", postDto.getTitle(), postDto.getContent());
-
-        postService.updatePost(postId, postDto.getTitle(), postDto.getContent());
-
-        return "redirect:/boards/{postId}";
     }
 
     @GetMapping("/{postId}")

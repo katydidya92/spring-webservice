@@ -35,7 +35,7 @@
                 <button th:if="${article.userId} == ${member.userId} "
                         class="w-100 btn btn-primary btn-lg"
                         onclick="location.href='editPost.html'"
-                        th:onclick="|location.href='@{|/boards/${article.id}/edit|}'|"
+                        th:onclick="|location.href='@{/boards/form(id=${article.id})}'|"
                         type="button" >게시글 수정</button>
             </div>
             <div class="col">
