@@ -89,7 +89,7 @@
                         <button th:if="${cmt.member.userId} == ${member.userId} "
                                 class="w-100 btn btn-primary btn-lg"
                                 onclick="location.href='editPost.html'"
-                                th:onclick="|location.href='@{/board/{postId}/{cmtId}/comment_edit(cmtId=${cmt.commentId}, postId=${article.id})}'|"
+                                th:onclick="|location.href='@{/boards/{postId}/{cmtId}/comment_edit(cmtId=${cmt.commentId}, postId=${article.id})}'|"
                                 type="button" >수정/삭제</button>
                     </td>
                     <td >
@@ -121,12 +121,11 @@
         </table>
 
         <div class="input-group mb-3">
-            <form class="form-inline d-flex justify-content-end" th:action="@{|/boards/${article.id}/comment_write|}" method="post">
-                <input type="text" id="cmtContent" name="cmtContent" class="form-control" placeholder="댓글을 입력해주세요">
-                <input type="hidden" id="cmtPostId" name="postId" th:value="${article.id}">
-                <input type="hidden" id="cmtReplyId" name="cmtReplyId" th:value="0">
-                <button class="btn btn-light mb-2" type="submit">댓글쓰기</button>
-            </form>
+            <input type="text" id="cmtContent" name="cmtContent" class="form-control" placeholder="댓글을 입력해주세요">
+            <input type="hidden" id="cmtPostId" name="postId" th:value="${article.id}">
+            <input type="hidden" id="cmtReplyId" name="cmtReplyId" th:value="0">
+            <button class="btn btn-light mb-2" type="button"
+                    th:onclick="|writeCmt(*{article.id})|">댓글 작성</button>
         </div>
 
         <footer th:replace="fragments/header :: footer"></footer>

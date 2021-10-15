@@ -22,14 +22,15 @@ class CommentServiceTest {
 
     @Test
     @Transactional
-    public void commentWrite() {
-        Comment comment = Comment.builder()
-                .cmtContent("asd")
-                .cmtReplyId(0L).build();
-
-        commentService.commentWrite(comment, memberService.findMembers().get(0), postService.getById(3L).getId());
-        assertThat(comment.getCmtContent()).isEqualTo("asd");
+    public void cmtWrite() {
+        int num = 10;
+        for (int i = 1; i <= num; i++) {
+            Comment comment = Comment.builder()
+                    .cmtContent(i+"번 댓글을 추가합니다.")
+                    .cmtReplyId(0L)
+                    .build();
+            commentService.commentWrite(comment, memberService.findOne(1L), postService.getById(102L).getId());
+        }
     }
-
 
 }

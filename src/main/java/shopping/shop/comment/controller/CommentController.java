@@ -14,6 +14,8 @@ import shopping.shop.member.domain.Member;
 import shopping.shop.post.domain.Post;
 import shopping.shop.post.service.PostService;
 
+import java.text.ParseException;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -24,10 +26,9 @@ public class CommentController {
     private final CommentService service;
     private final CommentRepositoryImpl cmtService;
 
-    @PostMapping("boards/{postId}/comment_write")
-    public String addComment(@ModelAttribute Comment comment,
-                             @PathVariable Long postId,
-                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+    @PostMapping("boards/comments/{postId}")
+    public String addComment(@ModelAttribute Comment comment, @PathVariable Long postId,
+                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) throws Exception{
 
         service.commentWrite(comment, member, postId);
         return "redirect:/boards/{postId}";
