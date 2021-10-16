@@ -37,9 +37,6 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Comment> comments;
-
     public Member(String userId, String userPw) {
         this.userId = userId;
         this.userPw = userPw;

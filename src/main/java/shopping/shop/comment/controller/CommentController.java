@@ -6,96 +6,79 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import shopping.shop.comment.domain.CmtResponseDto;
 import shopping.shop.comment.domain.Comment;
 import shopping.shop.comment.service.CommentRepositoryImpl;
 import shopping.shop.comment.service.CommentService;
 import shopping.shop.login.session.SessionConst;
 import shopping.shop.member.domain.Member;
-import shopping.shop.post.domain.Post;
-import shopping.shop.post.service.PostService;
-
-import java.text.ParseException;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/comments")
 public class CommentController {
-
-    private final PostService postService;
 
     private final CommentService service;
     private final CommentRepositoryImpl cmtService;
 
-    @PostMapping("boards/comments/{postId}")
-    public String addComment(@ModelAttribute Comment comment, @PathVariable Long postId,
-                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) throws Exception{
+    @GetMapping("/{cmtId}")
+    public String cmtOpen(@PathVariable Long cmtId, Model model, RedirectAttributes attributes,
+                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        service.commentWrite(comment, member, postId);
+        CmtResponseDto comment = service.findById(cmtId);
+
+        if (member.getUserId() == comment.getUserId()) {
+            model.addAttribute("comment", comment);
+            return "comments/editComment";
+        }
+        attributes.addAttribute("postId", comment.getPostId());
         return "redirect:/boards/{postId}";
     }
 
-    @GetMapping("boards/{postId}/{cmtId}/comment_reply")
-    public String addCmtReplyOpen(Model model,
-                                  @PathVariable Long postId,
-                                  @PathVariable Long cmtId,
-                                  @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+    @PostMapping("/{cmtId}")
+    public String editComment(@ModelAttribute Comment comment, @PathVariable Long cmtId, BindingResult bindingResult,
+                              RedirectAttributes attributes, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        Post post = postService.getById(postId);
-        Comment comment = service.getById(cmtId);
-
-        model.addAttribute("post", post);
-        model.addAttribute("comment", comment);
-        return "comments/replyCmt";
-    }
-
-    @PostMapping("boards/{postId}/{cmtId}/comment_reply")
-    public String addCmtReply(@ModelAttribute Comment comment,
-                              @PathVariable Long postId,
-                              @PathVariable Long cmtId,
-                              @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
-
-        Comment cmt = Comment.builder()
-                .cmtContent(comment.getCmtContent())
-                .cmtReplyId(cmtId)
-                .member(member)
-                .post(comment.getPost())
-                .build();
-
-        service.cmtReplyWrite(cmt);
-        return "redirect:/boards/{postId}";
-    }
-
-    @GetMapping("boards/{postId}/{cmtId}/comment_edit")
-    public String editCommentOpen(@PathVariable Long cmtId,
-                                  @PathVariable Long postId,
-                                  Model model) {
-
-        Comment comment = service.getById(cmtId);
-
-        model.addAttribute("comment", comment);
-        return "comments/editComment";
-    }
-
-    @PostMapping("boards/{postId}/{cmtId}/comment_edit")
-    public String editComment(@ModelAttribute Comment comment,
-                              @PathVariable Long cmtId,
-                              @PathVariable Long postId,
-                              BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() || member.getUserId() == comment.getUserId()) {
             log.info("errors={}", bindingResult);
             return "boards/editPost";
         }
 
         cmtService.updateComment(comment, cmtId);
+        attributes.addAttribute("postId", comment.getPostId());
         return "redirect:/boards/{postId}";
     }
 
-    @GetMapping("boards/{postId}/{cmtId}/comment_delete")
-    public String deleteComment(@PathVariable Long cmtId, @PathVariable Long postId) {
+    @GetMapping("/reply/{cmtId}")
+    public String addCmtReplyOpen(Model model, @PathVariable Long cmtId, RedirectAttributes attributes,
+                                  @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        cmtService.deleteComment(cmtId);
+        Comment comment = service.getById(cmtId);
+        if (member.getUserId() == comment.getUserId()) {
+            model.addAttribute("comment", comment);
+            return "comments/replyCmt";
+        }
 
+        attributes.addAttribute("postId", comment.getPostId());
+        return "redirect:/boards/{postId}";
+    }
+
+    @PostMapping("/reply/{cmtId}")
+    public String addCmtReply(@ModelAttribute Comment comment, RedirectAttributes attributes,
+                              @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+
+        Comment cmt = Comment.builder()
+                .cmtContent(comment.getCmtContent())
+                .cmtReplyId(comment.getCommentId())
+                .userId(member.getUserId())
+                .postId(comment.getPostId())
+                .build();
+
+        service.cmtReplyWrite(cmt);
+
+        attributes.addAttribute("postId", comment.getPostId());
         return "redirect:/boards/{postId}";
     }
 

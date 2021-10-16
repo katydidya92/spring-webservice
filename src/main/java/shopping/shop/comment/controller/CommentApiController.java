@@ -2,32 +2,53 @@ package shopping.shop.comment.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import shopping.shop.comment.domain.Comment;
+import shopping.shop.comment.domain.CmtListResponseDto;
+import shopping.shop.comment.domain.CmtResponseDto;
+import shopping.shop.comment.domain.CmtSaveRequestDto;
+import shopping.shop.comment.service.CommentRepositoryImpl;
 import shopping.shop.comment.service.CommentService;
 import shopping.shop.login.session.SessionConst;
 import shopping.shop.member.domain.Member;
 
+import java.util.List;
+
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comments")
 public class CommentApiController {
 
     private final CommentService service;
+    private final CommentRepositoryImpl cmtService;
 
-    @ResponseBody
-    @PostMapping("/{postId}")
-    public void addComment(
-            @ModelAttribute Comment comment, @PathVariable Long postId,
-            @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+    @PostMapping("")
+    public Long addComment(@RequestBody CmtSaveRequestDto dto,
+                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        log.info("postId:{}", postId);
-        log.info("comment:{}", comment.getCmtReplyId());
-        log.info("comment:{}", comment.getCmtContent());
+        CmtSaveRequestDto cmt = CmtSaveRequestDto.builder()
+                .cmtContent(dto.getCmtContent())
+                .cmtReplyId(dto.getCmtReplyId())
+                .userId(member.getUserId())
+                .postId(dto.getPostId())
+                .build();
 
-        service.commentWrite(comment, member, postId);
+        return service.commentWrite(cmt);
+    }
+
+    @GetMapping("")
+    public List<CmtListResponseDto> findAll(Long postId) {
+        return cmtService.findAllById(postId);
+    }
+
+    @GetMapping("/{id}")
+    public CmtResponseDto findById(@PathVariable Long cmtId) {
+        return service.findById(cmtId);
+    }
+
+    @PutMapping("/{cmtId}")
+    public void deleteComment(@PathVariable Long cmtId) {
+        cmtService.deleteComment(cmtId);
     }
 
 }

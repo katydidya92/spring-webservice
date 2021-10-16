@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import shopping.shop.comment.domain.CmtListResponseDto;
 import shopping.shop.comment.domain.Comment;
 import shopping.shop.comment.service.CommentRepositoryImpl;
 import shopping.shop.domain.MyPageSize;
@@ -57,7 +58,7 @@ public class BoardController {
                           @Valid @ModelAttribute("article") PostDto postDto, BindingResult bindingResult, RedirectAttributes attributes,
                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() || member.getUserId() != postDto.getUserId()) {
             log.info("errors={}", bindingResult);
             return "boards/writePost";
         }
@@ -111,8 +112,8 @@ public class BoardController {
 
         log.info("boardController : likeCheck= {}", likeCheck);
 
-        List<Comment> cmts = commentService.findAllById(postId);
-        List<Comment> reCmt = commentService.findAllRelistById(postId);
+        List<CmtListResponseDto> cmts = commentService.findAllById(postId);
+        List<CmtListResponseDto> reCmt = commentService.findAllRelistById(postId);
         model.addAttribute("article", post);
         model.addAttribute("cmts", cmts);
         model.addAttribute("reCmt", reCmt);

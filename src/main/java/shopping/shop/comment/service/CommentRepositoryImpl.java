@@ -4,12 +4,14 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shopping.shop.comment.domain.CmtListResponseDto;
 import shopping.shop.comment.domain.Comment;
 import shopping.shop.comment.repository.CommentRepositoryCustom;
 import shopping.shop.domain.IsAvailable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 import static shopping.shop.comment.domain.QComment.comment;
@@ -25,19 +27,27 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     }
 
     @Override
-    public List<Comment> findAllById(Long postId) {
-        return query.selectFrom(comment)
+    public List<CmtListResponseDto> findAllById(Long postId) {
+        List<Comment> cmtList = query.selectFrom(comment)
                 .where(postIdEq(postId))
                 .where(isAvailableEq(IsAvailable.IsAvailable))
+                .orderBy(comment.commentId.desc())
                 .fetch();
+
+        return cmtList.stream().map(CmtListResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Comment> findAllRelistById(Long postId) {
-        return query.selectFrom(comment)
+    public List<CmtListResponseDto> findAllRelistById(Long postId) {
+        List<Comment> reCmtList = query.selectFrom(comment)
                 .where(postIdEq(postId))
                 .where(isNotAvailableEq(IsAvailable.IsAvailable))
+                .orderBy(comment.commentId.desc())
                 .fetch();
+
+        return reCmtList.stream().map(CmtListResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -59,7 +69,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     }
 
     private BooleanExpression postIdEq(Long postId) {
-        return isEmpty(postId) ? null : comment.post.id.eq(postId);
+        return isEmpty(postId) ? null : comment.postId.eq(postId);
     }
 
     private BooleanExpression cmtIdEq(Long cmtId) {
@@ -69,6 +79,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     private BooleanExpression isAvailableEq(Integer cmtReplyNumIsZero) {
         return isEmpty(cmtReplyNumIsZero) ? null : comment.cmtReplyId.eq(Long.valueOf(IsAvailable.IsAvailable));
     }
+
     private BooleanExpression isNotAvailableEq(Integer cmtReplyNumIsZero) {
         return isEmpty(cmtReplyNumIsZero) ? null : comment.cmtReplyId.ne(Long.valueOf(IsAvailable.IsAvailable));
     }

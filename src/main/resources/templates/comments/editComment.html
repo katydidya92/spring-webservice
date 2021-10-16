@@ -13,14 +13,14 @@
         </div>
 
         <form th:action th:object="${comment}" method="post">
-
+            <input type="hidden" th:field="*{postId}">
             <div th:if="${#fields.hasGlobalErrors()}">
                 <p class="field-error" th:each="err : ${#fields.globalErrors()}"
                    th:text="${err}">글로벌 오류 메시지</p>
             </div>
             <div>
                 <label for="commentId" >댓글 ID</label>
-                <input type="text" id="commentId" th:field="*{commentId}" class="form-control" readonly>
+                <input type="text" id="commentId" th:field="*{cmtId}" class="form-control" readonly>
             </div>
             <div>
                 <label for="cmtContent" >댓글 내용</label>
@@ -33,7 +33,7 @@
             </div>
             <div>
                 <label for="userId" >댓글 작성자</label>
-                <input type="text" id="userId" th:field="*{member.userId}" class="form-control" readonly>
+                <input type="text" id="userId" th:field="*{userId}" class="form-control" readonly>
             </div>
 
             <hr class="my-4">
@@ -45,13 +45,7 @@
                 <div class="col">
                     <button class="w-100 btn btn-secondary btn-lg"
                             onclick="location.href='list.html'"
-                            th:onclick="|location.href='@{|/boards/${comment.post.id}/${comment.commentId}/comment_delete|}'|"
-                            type="button">삭제</button>
-                </div>
-                <div class="col">
-                    <button class="w-100 btn btn-secondary btn-lg"
-                            onclick="location.href='list.html'"
-                            th:onclick="|location.href='@{|/boards/${comment.post.id}|}'|"
+                            th:onclick="|location.href='@{|/boards/${comment.postId}|}'|"
                             type="button">취소</button>
                 </div>
             </div>

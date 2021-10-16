@@ -32,18 +32,35 @@ function deletePost(id) {
 
 function writeCmt(id) {
     var params = {
-        postId: $('#cmtPostId').val(),
+        postId: $('#postId').val(),
         cmtContent: $('#cmtContent').val(),
         cmtReplyId: $('#cmtReplyId').val()};
 
     $.ajax({
         type: 'POST',
-        url: '/api/comments/' + id,
-        data : JSON.stringify(param),
+        url: '/api/comments',
         dataType : "json",
         contentType : "application/json;charset=UTF-8",
+        data : JSON.stringify(params)
+        }).done(function() {
+            alert('댓글 등록 완료');
+            location.reload();
+        }).fail(function(error){
+            alert('댓글 등록 실패');
+            location.reload();
+        });
+}
+
+function deleteCmt(id) {
+
+    var postId = $('#postId').val();
+
+    $.ajax({
+        url: '/api/comments/' + id,
+        type: 'PUT',
         success: function() {
-            printCommentList();
+            alert('삭제됐습니다.');
+            window.location.href = '/boards/'+ postId;
         }
     });
 }
