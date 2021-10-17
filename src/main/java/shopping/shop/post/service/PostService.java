@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.shop.domain.MyPageSize;
 import shopping.shop.post.domain.Post;
+import shopping.shop.post.domain.PostSaveRequestDto;
 import shopping.shop.post.repository.PostRepository;
 
 import java.util.List;
@@ -22,8 +23,8 @@ public class PostService {
     private final PostRepository postRepository;
 
     @Transactional
-    public Post save(Post post) {
-        return postRepository.save(post);
+    public Long save(PostSaveRequestDto postSaveRequestDto) {
+        return postRepository.save(postSaveRequestDto.toEntity()).getId();
     }
 
     public Post getById(Long postId) {
@@ -31,11 +32,11 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(Long postId, String title, String content) {
+    public void updatePost(Long postId, PostSaveRequestDto postSaveRequestDto) {
         Post post = postRepository.getById(postId);
+        post.setTitle(postSaveRequestDto.getTitle()+"(수정)");
+        post.setContent(postSaveRequestDto.getContent());
 
-        post.setTitle(title+"(수정)");
-        post.setContent(content);
     }
 
     @Transactional

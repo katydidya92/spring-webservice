@@ -52,7 +52,6 @@ function writeCmt(id) {
 }
 
 function deleteCmt(id) {
-
     var postId = $('#postId').val();
 
     $.ajax({

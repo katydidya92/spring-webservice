@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.shop.post.domain.Post;
+import shopping.shop.post.domain.PostSaveRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,13 +23,23 @@ class PostServiceTest {
     public void updatePost() {
         Post post = postService.getById(3L);
 
-        post.setTitle("fshj");
-        post.setContent("sdfjksd");
+        PostSaveRequestDto postSaveRequestDto =
+                PostSaveRequestDto.builder()
+                        .title("fsdkjkl")
+                        .content("fsdfjk").build();
+        postService.updatePost(post.getId(), postSaveRequestDto );
 
-        postService.updatePost(post.getId(), post.getTitle(), post.getContent());
+        assertThat(post.getContent()).isEqualTo("fsdfjk");
+    }
 
-        assertThat(post.getContent()).isEqualTo("sdfjksd");
-
+    @Test
+    public void writePost() throws Exception {
+        PostSaveRequestDto postSaveRequestDto = PostSaveRequestDto.builder()
+                .userId("test!")
+                .content("fdsjk")
+                .title("fsjekds")
+                .build();
+        postService.save(postSaveRequestDto);
     }
 
     @Test

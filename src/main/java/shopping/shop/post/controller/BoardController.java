@@ -11,21 +11,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shopping.shop.comment.domain.CmtListResponseDto;
-import shopping.shop.comment.domain.Comment;
 import shopping.shop.comment.service.CommentRepositoryImpl;
 import shopping.shop.domain.MyPageSize;
 import shopping.shop.like.service.LikeService;
 import shopping.shop.login.session.SessionConst;
 import shopping.shop.member.domain.Member;
-import shopping.shop.member.domain.MemberDto;
 import shopping.shop.post.domain.Post;
-import shopping.shop.post.domain.PostDto;
+import shopping.shop.post.domain.PostSaveRequestDto;
 import shopping.shop.post.domain.PostParam;
 import shopping.shop.post.service.PostRepositoryImpl;
 import shopping.shop.post.service.PostService;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -41,40 +38,52 @@ public class BoardController {
     private final LikeService likeService;
 
     @GetMapping("/form")
-    public String openPost(@RequestParam(required = false) Long id, Model model,
+    public String openPost(@RequestParam(required = false) Long id, Model model, RedirectAttributes attributes,
                            @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
         if (id == null) {
             model.addAttribute("article", new Post());
         } else {
             Post post = postService.getById(id);
-            PostDto postDto = PostDto.builder().post(post).build();
-            model.addAttribute("article", postDto);
+
+            if (member.getUserId() == post.getUserId()) {
+                PostSaveRequestDto postSaveRequestDto =
+                        PostSaveRequestDto.builder()
+                                .title(post.getTitle())
+                                .content(post.getContent())
+                                .userId(post.getUserId())
+                                .build();
+                model.addAttribute("article", postSaveRequestDto);
+            } else {
+                attributes.addAttribute("Id", id);
+                return "redirect:/boards/{Id}";
+            }
         }
         return "boards/writePost";
     }
 
     @PostMapping("/form")
     public String addPost(@RequestParam(required = false) Long id,
-                          @Valid @ModelAttribute("article") PostDto postDto, BindingResult bindingResult, RedirectAttributes attributes,
+                          @Valid @ModelAttribute("article") PostSaveRequestDto dto, BindingResult bindingResult, RedirectAttributes attributes,
                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        if (bindingResult.hasErrors() || member.getUserId() != postDto.getUserId()) {
+        if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "boards/writePost";
         }
 
         if (id == null) {
-            Post post = Post.builder()
-                    .userId(member.getUserId())
-                    .title(postDto.getTitle())
-                    .content(postDto.getContent())
-                    .build();
+            PostSaveRequestDto postSaveRequestDto =
+                    PostSaveRequestDto.builder()
+                            .userId(member.getUserId())
+                            .title(dto.getTitle())
+                            .content(dto.getContent())
+                            .build();
 
-            Post savedPost = postService.save(post);
-            attributes.addAttribute("Id", savedPost.getId());
+            Long postId = postService.save(postSaveRequestDto);
+            attributes.addAttribute("Id", postId);
             attributes.addAttribute("status", true);
         } else {
-            postService.updatePost(postDto.getId(), postDto.getTitle(), postDto.getContent());
+            postService.updatePost(id, dto);
             attributes.addAttribute("Id", id);
         }
         return "redirect:/boards/{Id}";
@@ -129,7 +138,10 @@ public class BoardController {
     @PostConstruct
     public void initDb() {
         for (int i = 1; i < 101; i++) {
-            postService.save(new Post("test!", "a" + i, "b" + i));
+            postService.save(PostSaveRequestDto.builder().
+                    userId("test!")
+                    .title("a" + i)
+                    .content("b" + i).build());
         }
     }
 
