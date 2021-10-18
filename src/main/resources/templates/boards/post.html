@@ -104,34 +104,11 @@
                                 type="button" >대댓글</button>
                     </td>
                 </tr>
-                <tr th:each="reCmt : ${reCmt}">
-                    <td th:text="${reCmt.cmtContent}">내용</td>
-                    <td th:text="${reCmt.userId}">작성자</td>
-                    <td th:text="${#temporals.format(reCmt.modifiedDate,'yyyy-MM-dd HH:mm')}">수정일</td>
-                    <td >
-                        <button id="reCmtEditBtn" type="button"
-                                th:if="${reCmt.userId} == ${member.userId} "
-                                class="w-100 btn btn-primary btn-lg"
-                                onclick="location.href='editPost.html'"
-                                th:onclick="|location.href='@{|/comments/${reCmt.cmtId}|}'|">수정</button>
-                        <button id="reCmtDeleteBtn" type="button"
-                                th:if="${reCmt.userId} == ${member.userId} "
-                                class="w-100 btn btn-secondary btn-lg"
-                                th:onclick="|deleteCmt(*{reCmt.cmtId})|">삭제</button>
-                    </td>
-                    <td >
-                        <button class="w-100 btn btn-primary btn-lg"
-                                onclick="location.href='comment_reply.html'"
-                                th:onclick="|location.href='@{|/comments/reply/${reCmt.cmtId}|}'|"
-                                type="button" >대댓글</button>
-                    </td>
-                </tr>
             </tbody>
         </table>
 
         <div class="input-group mb-3">
             <input type="text" id="cmtContent" name="cmtContent" class="form-control" placeholder="댓글을 입력해주세요">
-            <input type="hidden" id="cmtReplyId" name="cmtReplyId" th:value="0">
             <button class="btn btn-light mb-2" type="button"
                     th:onclick="|writeCmt(*{article.id})|">댓글 작성</button>
         </div>

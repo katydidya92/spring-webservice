@@ -33,8 +33,7 @@ function deletePost(id) {
 function writeCmt(id) {
     var params = {
         postId: $('#postId').val(),
-        cmtContent: $('#cmtContent').val(),
-        cmtReplyId: $('#cmtReplyId').val()};
+        cmtContent: $('#cmtContent').val()};
 
     $.ajax({
         type: 'POST',
@@ -46,7 +45,7 @@ function writeCmt(id) {
             alert('댓글 등록 완료');
             location.reload();
         }).fail(function(error){
-            alert('댓글 등록 실패');
+            alert('data: ' + JSON.stringify(params));
             location.reload();
         });
 }

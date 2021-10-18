@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shopping.shop.comment.domain.CmtResponseDto;
+import shopping.shop.comment.domain.CmtSaveRequestDto;
 import shopping.shop.comment.domain.Comment;
 import shopping.shop.comment.service.CommentRepositoryImpl;
 import shopping.shop.comment.service.CommentService;
@@ -38,16 +39,23 @@ public class CommentController {
     }
 
     @PostMapping("/{cmtId}")
-    public String editComment(@ModelAttribute Comment comment, @PathVariable Long cmtId, BindingResult bindingResult,
+    public String editComment(@ModelAttribute CmtSaveRequestDto dto, @PathVariable Long cmtId, BindingResult bindingResult,
                               RedirectAttributes attributes, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        if (bindingResult.hasErrors() || member.getUserId() == comment.getUserId()) {
+        if (bindingResult.hasErrors() || member.getUserId() == dto.getUserId()) {
             log.info("errors={}", bindingResult);
             return "boards/editPost";
         }
 
+        CmtSaveRequestDto comment = CmtSaveRequestDto.builder()
+                .cmtContent(dto.getCmtContent())
+                .userId(member.getUserId())
+                .postId(dto.getPostId())
+                .parentId(dto.getParentId())
+                .build();
+
         cmtService.updateComment(comment, cmtId);
-        attributes.addAttribute("postId", comment.getPostId());
+        attributes.addAttribute("postId", dto.getPostId());
         return "redirect:/boards/{postId}";
     }
 
@@ -56,6 +64,10 @@ public class CommentController {
                                   @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
         Comment comment = service.getById(cmtId);
+        CmtResponseDto.builder()
+                .entity(comment)
+                .build();
+
         if (member.getUserId() == comment.getUserId()) {
             model.addAttribute("comment", comment);
             return "comments/replyCmt";
@@ -66,19 +78,20 @@ public class CommentController {
     }
 
     @PostMapping("/reply/{cmtId}")
-    public String addCmtReply(@ModelAttribute Comment comment, RedirectAttributes attributes,
+    public String addCmtReply(@ModelAttribute CmtSaveRequestDto dto, RedirectAttributes attributes,
                               @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        Comment cmt = Comment.builder()
-                .cmtContent(comment.getCmtContent())
-                .cmtReplyId(comment.getCommentId())
+        CmtSaveRequestDto cmt = CmtSaveRequestDto.builder()
+                .cmtContent(dto.getCmtContent())
                 .userId(member.getUserId())
-                .postId(comment.getPostId())
+                .postId(dto.getPostId())
+                .parentId(dto.getParentId())
                 .build();
 
-        service.cmtReplyWrite(cmt);
+        log.info("dto:{}", dto.getParentId());
+        service.commentWrite(cmt);
 
-        attributes.addAttribute("postId", comment.getPostId());
+        attributes.addAttribute("postId", dto.getPostId());
         return "redirect:/boards/{postId}";
     }
 

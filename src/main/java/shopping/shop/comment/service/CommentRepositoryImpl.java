@@ -5,9 +5,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.shop.comment.domain.CmtListResponseDto;
+import shopping.shop.comment.domain.CmtSaveRequestDto;
 import shopping.shop.comment.domain.Comment;
 import shopping.shop.comment.repository.CommentRepositoryCustom;
-import shopping.shop.domain.IsAvailable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -29,9 +29,10 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     @Override
     public List<CmtListResponseDto> findAllById(Long postId) {
         List<Comment> cmtList = query.selectFrom(comment)
+                .leftJoin(comment.parent)
                 .where(postIdEq(postId))
-                .where(isAvailableEq(IsAvailable.IsAvailable))
-                .orderBy(comment.commentId.desc())
+                .orderBy(comment.parent.commentId.asc().nullsFirst(),
+                        comment.lastModifiedDate.asc())
                 .fetch();
 
         return cmtList.stream().map(CmtListResponseDto::new)
@@ -39,22 +40,9 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     }
 
     @Override
-    public List<CmtListResponseDto> findAllRelistById(Long postId) {
-        List<Comment> reCmtList = query.selectFrom(comment)
-                .where(postIdEq(postId))
-                .where(isNotAvailableEq(IsAvailable.IsAvailable))
-                .orderBy(comment.commentId.desc())
-                .fetch();
-
-        return reCmtList.stream().map(CmtListResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     @Transactional
-    public void updateComment(Comment cmt, Long cmtId) {
-        long execute = query
-                .update(comment)
+    public void updateComment(CmtSaveRequestDto cmt, Long cmtId) {
+        query.update(comment)
                 .set(comment.cmtContent, cmt.getCmtContent())
                 .where(cmtIdEq(cmtId))
                 .execute();
@@ -62,8 +50,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
     @Override
     public void deleteComment(Long cmtId) {
-        long execute = query
-                .delete(comment)
+        query.delete(comment)
                 .where(cmtIdEq(cmtId))
                 .execute();
     }
@@ -76,11 +63,4 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
         return isEmpty(cmtId) ? null : comment.commentId.eq(cmtId);
     }
 
-    private BooleanExpression isAvailableEq(Integer cmtReplyNumIsZero) {
-        return isEmpty(cmtReplyNumIsZero) ? null : comment.cmtReplyId.eq(Long.valueOf(IsAvailable.IsAvailable));
-    }
-
-    private BooleanExpression isNotAvailableEq(Integer cmtReplyNumIsZero) {
-        return isEmpty(cmtReplyNumIsZero) ? null : comment.cmtReplyId.ne(Long.valueOf(IsAvailable.IsAvailable));
-    }
 }

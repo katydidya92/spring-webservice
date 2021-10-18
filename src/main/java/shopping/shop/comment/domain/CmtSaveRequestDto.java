@@ -9,25 +9,17 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CmtSaveRequestDto {
 
-    private Long cmtReplyId;
+    private Long parentId;
     private String cmtContent;
     private String userId;
     private Long postId;
 
     @Builder
-    public CmtSaveRequestDto(Long cmtReplyId, String cmtContent, String userId, Long postId) {
-        this.cmtReplyId = cmtReplyId;
+    public CmtSaveRequestDto(Long parentId, String cmtContent, String userId, Long postId) {
+        this.parentId = parentId;
         this.cmtContent = cmtContent;
         this.userId = userId;
         this.postId = postId;
     }
 
-    public Comment toEntity() {
-        return Comment.builder()
-                .cmtReplyId(cmtReplyId)
-                .cmtContent(cmtContent)
-                .userId(userId)
-                .postId(postId)
-                .build();
-    }
 }

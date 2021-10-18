@@ -26,7 +26,6 @@ class CommentServiceTest {
         for (int i = 1; i <= num; i++) {
             CmtSaveRequestDto comment = CmtSaveRequestDto.builder()
                     .cmtContent(i+"번 댓글을 추가합니다.")
-                    .cmtReplyId(0L)
                     .userId(memberService.findMembers().get(0).getUserId())
                     .postId(102L)
                     .build();

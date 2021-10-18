@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.shop.comment.domain.CmtResponseDto;
-import shopping.shop.comment.domain.Comment;
 import shopping.shop.comment.domain.CmtSaveRequestDto;
+import shopping.shop.comment.domain.Comment;
 import shopping.shop.comment.repository.CommentRepository;
 
 @Slf4j
@@ -18,13 +18,17 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public Long commentWrite(CmtSaveRequestDto comment) {
-        return commentRepository.save(comment.toEntity()).getCommentId();
-    }
-
-    @Transactional
-    public void cmtReplyWrite(Comment comment) {
-        commentRepository.save(comment);
+    public Comment commentWrite(CmtSaveRequestDto requestDto) {
+        Comment comment = commentRepository.save(
+                Comment.builder()
+                        .cmtContent(requestDto.getCmtContent())
+                        .postId(requestDto.getPostId())
+                        .userId(requestDto.getUserId())
+                        .parent(requestDto.getParentId() != null ?
+                                commentRepository.findById(requestDto.getParentId()).orElseThrow() : null)
+                        .build()
+        );
+        return comment;
     }
 
     public Comment getById(Long cmtId) {

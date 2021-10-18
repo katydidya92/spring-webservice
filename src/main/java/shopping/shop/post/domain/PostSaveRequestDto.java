@@ -32,15 +32,6 @@ public class PostSaveRequestDto {
         this.count = count;
     }
 
-//    @Builder
-//    public PostSaveRequestDto(Post post) {
-//        this.id = post.getId();
-//        this.userId = post.getUserId();
-//        this.title = post.getTitle();
-//        this.content = post.getContent();
-//        this.count = post.getCount();
-//    }
-
     public Post toEntity() {
         return Post.builder()
                 .title(title)
