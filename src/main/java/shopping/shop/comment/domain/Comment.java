@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shopping.shop.domain.BaseTimeEntity;
+import shopping.shop.common.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package shopping.shop.domain;
+package shopping.shop.common;
 
 import lombok.*;
 

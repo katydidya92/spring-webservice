@@ -1,9 +1,9 @@
 package shopping.shop.item.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.web.multipart.MultipartFile;
+import shopping.shop.upload.domian.UploadFile;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter @Setter
+@RequiredArgsConstructor
 public class ItemDto {
 
     private Long itemId;
@@ -30,4 +31,13 @@ public class ItemDto {
 
     private MultipartFile attachFile;
 
+    @Builder
+    public ItemDto(Long itemId, String userId, String itemName, Integer price, Integer quantity, MultipartFile attachFile) {
+        this.itemId = itemId;
+        this.userId = userId;
+        this.itemName = itemName;
+        this.price = price;
+        this.quantity = quantity;
+        this.attachFile = attachFile;
+    }
 }

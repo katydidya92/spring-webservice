@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shopping.shop.comment.domain.CmtListResponseDto;
 import shopping.shop.comment.service.CommentRepositoryImpl;
-import shopping.shop.domain.MyPageSize;
+import shopping.shop.common.MyPageSize;
 import shopping.shop.like.service.LikeService;
 import shopping.shop.login.session.SessionConst;
 import shopping.shop.member.domain.Member;

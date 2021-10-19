@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import shopping.shop.domain.Address;
+import shopping.shop.common.Address;
 import shopping.shop.member.domain.Member;
 import shopping.shop.member.domain.MemberDto;
 import shopping.shop.member.service.MemberService;

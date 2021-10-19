@@ -3,11 +3,10 @@ package shopping.shop.item.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shopping.shop.domain.BaseTimeEntity;
+import shopping.shop.common.BaseTimeEntity;
 import shopping.shop.upload.domian.UploadFile;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter @NoArgsConstructor
@@ -25,13 +24,6 @@ public class Item extends BaseTimeEntity {
 
     @Embedded
     private UploadFile attachFile;
-
-    public Item(String itemName, Integer price, Integer quantity, String userId) {
-        this.itemName = itemName;
-        this.price = price;
-        this.quantity = quantity;
-        this.userId = userId;
-    }
 
     @Builder
     public Item(String itemName, Integer price, Integer quantity, String userId, UploadFile attachFile) {

@@ -1,4 +1,4 @@
-package shopping.shop.domain;
+package shopping.shop.common;
 
 public interface IsAvailable {
     Integer IsAvailable = 0;

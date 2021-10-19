@@ -4,13 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import shopping.shop.domain.Address;
-import shopping.shop.domain.BaseTimeEntity;
-import shopping.shop.comment.domain.Comment;
+import shopping.shop.common.Address;
+import shopping.shop.common.BaseTimeEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Entity
 @Getter @Setter

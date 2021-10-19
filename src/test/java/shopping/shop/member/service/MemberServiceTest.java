@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
-import shopping.shop.domain.Address;
+import shopping.shop.common.Address;
 import shopping.shop.member.domain.Member;
 
 import static org.assertj.core.api.Assertions.assertThat;

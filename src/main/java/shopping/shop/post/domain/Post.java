@@ -5,8 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import shopping.shop.comment.domain.Comment;
-import shopping.shop.domain.BaseTimeEntity;
+import shopping.shop.common.BaseTimeEntity;
 import shopping.shop.like.domain.Like;
 
 import javax.persistence.*;
