@@ -8,7 +8,6 @@ import shopping.shop.common.Address;
 import shopping.shop.member.domain.Member;
 import shopping.shop.member.domain.MemberDto;
 import shopping.shop.member.repository.MemberRepository;
-import shopping.shop.member.repository.MemberRepository2;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberRepository2 memberRepository2;
 
     @Transactional
     public Long join(MemberDto dto) {
@@ -72,7 +70,8 @@ public class MemberService {
     }
 
     public Member findOne(Long memberId) {
-        return memberRepository2.findOne(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        return member;
     }
 
 }
