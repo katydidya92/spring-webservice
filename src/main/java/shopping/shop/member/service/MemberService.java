@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.shop.common.Address;
 import shopping.shop.member.domain.Member;
+import shopping.shop.member.domain.MemberDto;
 import shopping.shop.member.repository.MemberRepository;
 import shopping.shop.member.repository.MemberRepository2;
 
@@ -21,7 +22,23 @@ public class MemberService {
     private final MemberRepository2 memberRepository2;
 
     @Transactional
-    public Long join(Member member) {
+    public Long join(MemberDto dto) {
+
+        Address address = Address.builder()
+                .zipcode(dto.getZipcode())
+                .roadAddr(dto.getRoadAddr())
+                .addrDetail(dto.getAddrDetail())
+                .adEtc(dto.getAdEtc()).build();
+
+        Member member = Member.builder()
+                .age(dto.getAge())
+                .email(dto.getEmail())
+                .name(dto.getName())
+                .userId(dto.getUserId())
+                .userPw(dto.getUserPw())
+                .address(address)
+                .build();
+
         validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();

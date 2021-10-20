@@ -1,9 +1,6 @@
 package shopping.shop.member.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Email;
@@ -43,5 +40,18 @@ public class MemberDto {
         this.name = name;
         this.age = age;
         this.email = email;
+    }
+
+    @Builder
+    public MemberDto(Member member) {
+        this.userId = member.getUserId();
+        this.userPw = member.getUserPw();
+        this.name = member.getName();
+        this.age = member.getAge();
+        this.email = member.getEmail();
+        this.zipcode = member.getAddress().getZipcode();
+        this.roadAddr = member.getAddress().getRoadAddr();
+        this.addrDetail = member.getAddress().getAddrDetail();
+        this.adEtc = member.getAddress().getAdEtc();
     }
 }

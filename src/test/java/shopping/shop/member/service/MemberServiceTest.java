@@ -7,6 +7,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.shop.common.Address;
 import shopping.shop.member.domain.Member;
+import shopping.shop.member.domain.MemberDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,7 +34,9 @@ class MemberServiceTest {
                         .build())
                 .build();
 
-        Long joinMemberId = memberService.join(member);
+        MemberDto memberDto = MemberDto.builder().member(member).build();
+
+        Long joinMemberId = memberService.join(memberDto);
         Member findMember = memberService.findOne(joinMemberId);
         assertThat(findMember).isEqualTo(member);
     }
@@ -56,7 +59,9 @@ class MemberServiceTest {
                         .build())
                 .build();
 
-        Long joinMemberId2 = memberService.join(member2);
+        MemberDto memberDto = MemberDto.builder().member(member2).build();
+
+        Long joinMemberId2 = memberService.join(memberDto);
         Member findMember2 = memberService.findOne(joinMemberId2);
         assertThat(findMember2).isEqualTo(member2);
     }
