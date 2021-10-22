@@ -22,19 +22,17 @@ public class MemberService {
     @Transactional
     public Long join(MemberDto dto) {
 
-        Address address = Address.builder()
-                .zipcode(dto.getZipcode())
-                .roadAddr(dto.getRoadAddr())
-                .addrDetail(dto.getAddrDetail())
-                .adEtc(dto.getAdEtc()).build();
-
         Member member = Member.builder()
                 .age(dto.getAge())
                 .email(dto.getEmail())
                 .name(dto.getName())
                 .userId(dto.getUserId())
                 .userPw(dto.getUserPw())
-                .address(address)
+                .address(Address.builder()
+                        .zipcode(dto.getZipcode())
+                        .roadAddr(dto.getRoadAddr())
+                        .addrDetail(dto.getAddrDetail())
+                        .adEtc(dto.getAdEtc()).build())
                 .build();
 
         validateDuplicateMember(member);
@@ -45,7 +43,7 @@ public class MemberService {
     @Transactional
     public void updateMember(Long memberId, Member member) {
         Member memberData = memberRepository.getById(memberId);
-        log.info("memberData1={}", memberData.getAddress().getZipcode());
+        log.info("memberData={}", memberData.getAddress().getZipcode());
         memberData.setAge(member.getAge());
         memberData.setName(member.getName());
         memberData.setEmail(member.getEmail());
@@ -70,8 +68,7 @@ public class MemberService {
     }
 
     public Member findOne(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow();
-        return member;
+        return memberRepository.findById(memberId).orElseThrow();
     }
 
 }
