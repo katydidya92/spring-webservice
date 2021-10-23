@@ -7,11 +7,14 @@ import org.springframework.stereotype.Repository;
 import shopping.shop.member.domain.Member;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select m.userId from Member m where userId = :userId")
     List<Member> findUserId(@Param("userId") String userId);
+
+    Optional<Member> findByUserId(String userId);
 
 }

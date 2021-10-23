@@ -18,18 +18,18 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/members")
+//@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/add")
+    @GetMapping("/members")
     public String openAddForm(Model model) {
         model.addAttribute("member", new MemberDto());
         return "members/addMemberForm";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/members")
     public String save(@Valid @ModelAttribute("member") MemberDto dto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -77,11 +77,25 @@ public class MemberController {
     public void init() {
         memberService.join(
                 new MemberDto(
-                        new Member("test!", "test!", "asd", 10, "asd@asd",
-                                new Address("06112", "서울 강남구 논현로123길 4-1", "123", "(논현동)"))));
+                        Member.builder()
+                                .auth("ROLE_USER")
+                                .name("asd")
+                                .age(10)
+                                .email("asd@asd")
+                                .password("test!")
+                                .userId("test!")
+                                .address(new Address("06112", "서울 강남구 논현로123길 4-1", "123", "(논현동)"))
+                                .build()));
         memberService.join(
                 new MemberDto(
-                        new Member("asd", "asd", "asd", 10, "asd@asd",
-                                new Address("06112", "서울 강남구 논현로123길 4-1", "123", "(논현동)"))));
+                        Member.builder()
+                                .userId("asd!")
+                                .password("asd!")
+                                .auth("ROLE_ADMIN")
+                                .name("asd")
+                                .age(10)
+                                .email("as2d@asd")
+                                .address(new Address("06112", "서울 강남구 논현로123길 4-1", "123", "(논현동)"))
+                                .build()));
     }
 }

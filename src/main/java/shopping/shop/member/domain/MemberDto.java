@@ -2,28 +2,36 @@ package shopping.shop.member.domain;
 
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
+import shopping.shop.common.Address;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class MemberDto {
 
-    @NotBlank @NotNull
+    @NotBlank
+    @NotNull
     private String userId;
 
-    @NotNull @NotBlank
-    private String userPw;
+    @NotNull
+    @NotBlank
+    private String password;
 
-    @NotNull @NotBlank
+    @NotNull
+    @NotBlank
     private String name;
 
-    @NotNull @Range(min = 1, max = 150)
+    @NotNull
+    @Range(min = 1, max = 150)
     private int age;
 
-    @NotNull @NotBlank @Email
+    @NotNull
+    @NotBlank
+    @Email
     private String email;
 
     @NotBlank
@@ -34,18 +42,12 @@ public class MemberDto {
     private String addrDetail;
     private String adEtc;
 
-    public MemberDto(String userId, String userPw, String name, int age, String email) {
-        this.userId = userId;
-        this.userPw = userPw;
-        this.name = name;
-        this.age = age;
-        this.email = email;
-    }
+    private String auth;
 
     @Builder
     public MemberDto(Member member) {
         this.userId = member.getUserId();
-        this.userPw = member.getUserPw();
+        this.password = member.getPassword();
         this.name = member.getName();
         this.age = member.getAge();
         this.email = member.getEmail();
@@ -53,5 +55,10 @@ public class MemberDto {
         this.roadAddr = member.getAddress().getRoadAddr();
         this.addrDetail = member.getAddress().getAddrDetail();
         this.adEtc = member.getAddress().getAdEtc();
+        this.auth = member.getAuth();
+    }
+
+    public Member toEntity() {
+        return Member.builder().userId(userId).password(password).name(name).age(age).email(email).address(Address.builder().zipcode(zipcode).roadAddr(roadAddr).addrDetail(addrDetail).adEtc(adEtc).build()).auth(auth).build();
     }
 }

@@ -2,6 +2,9 @@ package shopping.shop.member.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.shop.common.Address;
@@ -13,31 +16,19 @@ import java.util.List;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberService {
+@Transactional(readOnly = true)
+public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
     @Transactional
     public Long join(MemberDto dto) {
 
-        Member member = Member.builder()
-                .age(dto.getAge())
-                .email(dto.getEmail())
-                .name(dto.getName())
-                .userId(dto.getUserId())
-                .userPw(dto.getUserPw())
-                .address(Address.builder()
-                        .zipcode(dto.getZipcode())
-                        .roadAddr(dto.getRoadAddr())
-                        .addrDetail(dto.getAddrDetail())
-                        .adEtc(dto.getAdEtc()).build())
-                .build();
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        dto.setPassword(encoder.encode(dto.getPassword()));
 
-        validateDuplicateMember(member);
-        memberRepository.save(member);
-        return member.getId();
+        return memberRepository.save(dto.toEntity()).getId();
     }
 
     @Transactional
@@ -53,14 +44,6 @@ public class MemberService {
                 .addrDetail(member.getAddress().getAddrDetail())
                 .adEtc(member.getAddress().getAdEtc()).build()
         );
-        log.info("memberData2={}", memberData.getAddress().getZipcode());
-    }
-
-    private void validateDuplicateMember(Member member) {
-        List<Member> findMembers = memberRepository.findUserId(member.getUserId());
-        if (!findMembers.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
-        }
     }
 
     public List<Member> findMembers() {
@@ -71,4 +54,9 @@ public class MemberService {
         return memberRepository.findById(memberId).orElseThrow();
     }
 
+    @Override
+    public Member loadUserByUsername(String userId) throws UsernameNotFoundException {
+        return memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException((userId)));
+    }
 }

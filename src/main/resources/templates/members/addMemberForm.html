@@ -19,17 +19,21 @@
                    th:text="${err}">전체 오류 메시지</p>
             </div>
             <div>
+                <input type="radio" name="auth" value="ROLE_ADMIN,ROLE_USER"> admin
+                <input type="radio" name="auth" value="ROLE_USER" checked="checked"> user <br>
+            </div>
+            <div>
                 <label for="userId">로그인 ID</label>
                 <input type="text" id="userId" th:field="*{userId}" class="form-control"
                        th:errorclass="field-error">
                 <div class="field-error" th:errors="*{userId}" />
             </div>
             <div>
-                <label for="userPw">비밀번호</label>
-                <input type="password" id="userPw" th:field="*{userPw}"
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" th:field="*{password}"
                        class="form-control"
                        th:errorclass="field-error">
-                <div class="field-error" th:errors="*{userPw}" />
+                <div class="field-error" th:errors="*{password}" />
             </div>
             <div>
                 <label for="name">이름</label>
