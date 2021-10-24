@@ -22,7 +22,7 @@ class MemberServiceTest {
     void joinSuccess() {
         Member member = Member.builder()
                 .userId("asd1")
-                .userPw("asd1")
+                .password("asd1")
                 .name("asd1")
                 .age(10)
                 .email("asd@asd")
