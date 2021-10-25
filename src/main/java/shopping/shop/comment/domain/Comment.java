@@ -15,7 +15,7 @@ import java.util.List;
 public class Comment extends BaseTimeEntity {
 
     @Id @GeneratedValue
-    private Long commentId;
+    private Long cmtId;
     private String cmtContent;
     private String userId;
     private Long postId;

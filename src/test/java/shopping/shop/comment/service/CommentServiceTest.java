@@ -7,9 +7,6 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.shop.comment.domain.CmtSaveRequestDto;
 import shopping.shop.member.service.MemberService;
-import shopping.shop.post.service.PostService;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Commit
 @SpringBootTest
@@ -17,7 +14,6 @@ class CommentServiceTest {
 
     @Autowired CommentService commentService;
     @Autowired MemberService memberService;
-    @Autowired PostService postService;
 
     @Test
     @Transactional
@@ -29,7 +25,7 @@ class CommentServiceTest {
                     .userId(memberService.findMembers().get(0).getUserId())
                     .postId(102L)
                     .build();
-            commentService.commentWrite(comment);
+            commentService.commentWrite(comment, memberService.findOne(0L));
         }
     }
 

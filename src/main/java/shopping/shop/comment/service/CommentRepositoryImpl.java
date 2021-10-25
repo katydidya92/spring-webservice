@@ -31,7 +31,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
         List<Comment> cmtList = query.selectFrom(comment)
                 .leftJoin(comment.parent)
                 .where(postIdEq(postId))
-                .orderBy(comment.parent.commentId.asc().nullsFirst(),
+                .orderBy(comment.parent.cmtId.asc().nullsFirst(),
                         comment.lastModifiedDate.asc())
                 .fetch();
 
@@ -60,7 +60,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     }
 
     private BooleanExpression cmtIdEq(Long cmtId) {
-        return isEmpty(cmtId) ? null : comment.commentId.eq(cmtId);
+        return isEmpty(cmtId) ? null : comment.cmtId.eq(cmtId);
     }
 
 }
