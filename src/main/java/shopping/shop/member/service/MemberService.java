@@ -2,8 +2,6 @@ package shopping.shop.member.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +16,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberService implements UserDetailsService {
+public class MemberService {
 
     private final MemberRepository memberRepository;
 
     @Transactional
     public Long join(MemberDto dto) {
 
-//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//        dto.setPassword(encoder.encode(dto.getPassword()));
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        dto.setPassword(encoder.encode(dto.getPassword()));
 
         return memberRepository.save(dto.toEntity()).getId();
     }
@@ -54,9 +52,4 @@ public class MemberService implements UserDetailsService {
         return memberRepository.findById(memberId).orElseThrow();
     }
 
-    @Override
-    public Member loadUserByUsername(String userId) throws UsernameNotFoundException {
-        return memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new UsernameNotFoundException((userId)));
-    }
 }

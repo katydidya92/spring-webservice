@@ -20,8 +20,8 @@
                    th:text="${err}">글로벌 오류 메시지</p>
             </div>
             <div>
-                <input type="hidden" id="cmtReplyId" name="cmtReplyId" th:value="*{commentId}">
-                <input type="hidden" id="commentId" th:field="*{commentId}">
+                <input type="hidden" id="cmtReplyId" name="cmtReplyId" th:value="*{cmtId}">
+                <input type="hidden" id="cmtId" th:field="*{cmtId}">
             </div>
             <div>
                 <label for="cmtContent" >이전 댓글 내용</label>

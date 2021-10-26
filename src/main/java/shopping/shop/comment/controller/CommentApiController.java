@@ -27,13 +27,7 @@ public class CommentApiController {
     public Comment addComment(@RequestBody CmtSaveRequestDto dto,
                               @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        CmtSaveRequestDto cmt = CmtSaveRequestDto.builder()
-                .cmtContent(dto.getCmtContent())
-                .userId(member.getUserId())
-                .postId(dto.getPostId())
-                .build();
-
-        return service.commentWrite(cmt);
+        return service.commentWrite(dto, member);
     }
 
     @GetMapping("")

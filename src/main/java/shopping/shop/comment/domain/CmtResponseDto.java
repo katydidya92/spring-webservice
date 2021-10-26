@@ -17,8 +17,8 @@ public class CmtResponseDto {
 
     @Builder
     public CmtResponseDto(Comment entity) {
-        this.cmtId = entity.getCommentId();
-        this.cmtReplyId = entity.getCommentId();
+        this.cmtId = entity.getCmtId();
+        this.cmtReplyId = entity.getCmtId();
         this.cmtContent = entity.getCmtContent();
         this.userId = entity.getUserId();
         this.postId = entity.getPostId();

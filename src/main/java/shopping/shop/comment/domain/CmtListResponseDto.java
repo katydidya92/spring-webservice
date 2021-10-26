@@ -16,7 +16,7 @@ public class CmtListResponseDto {
     private LocalDateTime modifiedDate;
 
     public CmtListResponseDto(Comment entity) {
-        this.cmtId = entity.getCommentId();
+        this.cmtId = entity.getCmtId();
         this.cmtContent = entity.getCmtContent();
         this.userId = entity.getUserId();
         this.postId = entity.getPostId();

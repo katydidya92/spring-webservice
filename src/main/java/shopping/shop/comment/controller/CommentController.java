@@ -47,14 +47,7 @@ public class CommentController {
             return "boards/editPost";
         }
 
-        CmtSaveRequestDto comment = CmtSaveRequestDto.builder()
-                .cmtContent(dto.getCmtContent())
-                .userId(member.getUserId())
-                .postId(dto.getPostId())
-                .parentId(dto.getParentId())
-                .build();
-
-        cmtService.updateComment(comment, cmtId);
+        cmtService.updateComment(dto, cmtId);
         attributes.addAttribute("postId", dto.getPostId());
         return "redirect:/boards/{postId}";
     }
@@ -64,12 +57,11 @@ public class CommentController {
                                   @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
         Comment comment = service.getById(cmtId);
-        CmtResponseDto.builder()
-                .entity(comment)
-                .build();
+        CmtResponseDto cmtResponseDto =
+                CmtResponseDto.builder().entity(comment).build();
 
         if (member.getUserId() == comment.getUserId()) {
-            model.addAttribute("comment", comment);
+            model.addAttribute("comment", cmtResponseDto);
             return "comments/replyCmt";
         }
 
@@ -81,16 +73,7 @@ public class CommentController {
     public String addCmtReply(@ModelAttribute CmtSaveRequestDto dto, RedirectAttributes attributes,
                               @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
-        CmtSaveRequestDto cmt = CmtSaveRequestDto.builder()
-                .cmtContent(dto.getCmtContent())
-                .userId(member.getUserId())
-                .postId(dto.getPostId())
-                .parentId(dto.getParentId())
-                .build();
-
-        log.info("dto:{}", dto.getParentId());
-        service.commentWrite(cmt);
-
+        service.commentWrite(dto, member);
         attributes.addAttribute("postId", dto.getPostId());
         return "redirect:/boards/{postId}";
     }
